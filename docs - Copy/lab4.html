@@ -344,53 +344,17 @@ div.tocify {
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<div class="bluebox">
+<div class="purplebox">
 <div class="left">
-<p><strong>Submission</strong></p>
+
 </div>
-<p>Please carefully read the instruction and all 6 examples. At the end,
-please DIY a simple web page using HTML for any topics… Then, submit
-your web page (.html) on Canvas.</p>
-<p>The zip file containing all examples can be found here: <a
-href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab4.zip"
-class="uri">https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab4.zip</a>.
-The image below explains how to download from the link.</p>
+<p>You would need to use <a
+href="https://j2jexplorer.ces.census.gov/">Job-to-Job Flows (J2J)</a>
+for Assignment 3.</p>
 </div>
-<p><br></p>
-<p><img src="figs/lab4_download_zip.png" style="width:70.0%"
-alt="Figure 2.0: To downalod lab 4 materials" /> <br></p>
 </div>
-<div id="getting-setup-with-an-html-editor-and-browser"
-class="section level2">
-<h2>Getting Setup with an HTML Editor and Browser</h2>
-<p>The first step in creating an interactive mapping web site is to get
-setup with a <strong>text editor</strong> that can create HTML pages.
-Some common text editor software examples are:</p>
-<ul>
-<li><a href="http://brackets.io/"
-class="uri">http://brackets.io/</a></li>
-<li><a href="https://atom.io/" class="uri">https://atom.io/</a></li>
-<li><a href="http://www.sublimetext.com/"
-class="uri">http://www.sublimetext.com/</a></li>
-</ul>
-<p>Download <strong>one</strong> of these text editors on your laptop
-and create a new file.</p>
-</div>
-<div id="creating-a-first-web-page" class="section level2">
-<h2>Creating a First Web Page</h2>
-<p>Using one of these text editors, you can create a very simple
-<strong>HTML</strong> page like the code below. This shows the basic
-structure of an HTML page.</p>
-<blockquote>
-<p>Elements are the basic building blocks of HTML which are defined by
-an opening tag and end with a closing tag.</p>
-</blockquote>
-<p>The entire page is within the <code>&lt;html&gt;</code> element. The
-core HTML elements are the <code>&lt;head&gt;</code> (including document
-wide properties like the title tag) and the <code>&lt;body&gt;</code>
-(the content of the page)</p>
-<div id="example-1" class="section level3">
-<h3>Example 1</h3>
+<div id="example-1" class="section level2">
+<h2>Example 1</h2>
 <pre class="html"><code>&lt;html&gt;
 
 &lt;head&gt;
@@ -404,43 +368,14 @@ wide properties like the title tag) and the <code>&lt;body&gt;</code>
 
 &lt;/html&gt;
 </code></pre>
-<p>Save this file as <strong>example1.html</strong>.</p>
-<blockquote>
-<p>When you double click on the html file you have created, it should
-open in your <strong>default web browser</strong> software, and show the
-text as the Fig. 4.1</p>
-</blockquote>
-<p><img src="figs/lab4_e1.png" style="width:70.0%"
-alt="Figure 4.1: Screenshots of HTML Example 1" /> <br></p>
+<div class="float">
+<img src="figs/lab4_e1.png" style="width:70.0%"
+alt="Figure 4.1: Screenshots of HTML Example 1" />
+<div class="figcaption">Figure 4.1: Screenshots of HTML Example 1</div>
 </div>
 </div>
-<div id="adding-more-html-elements" class="section level2">
-<h2>Adding More HTML Elements</h2>
-<div id="example-2" class="section level3">
-<h3>Example 2</h3>
-<p>Now we will add some of the most common HTML elements. The
-<em><strong>link element</strong></em> <code>&lt;a&gt;</code> defines
-links to other web pages such as:</p>
-<blockquote>
-<p><code>&lt;a href='https://www.uccs.edu/'&gt;Link to UCCS&lt;/a&gt;</code></p>
-</blockquote>
-<p>This element includes an ‘attribute’, which is a property of the
-element which is defined in the opening tag. In this case it is the URL
-of the link.</p>
-<p>The <em><strong>image element</strong></em> <code>&lt;img&gt;</code>
-displays images on the web page. The image file needs to be in the
-<em>same folder</em> as the HTML file (and would need to uploaded to the
-server on a live site):</p>
-<blockquote>
-<p><code>&lt;img src="uccs_logo.png" alt="UCCS Logo" /&gt;</code></p>
-</blockquote>
-<p>The <em><strong>unordered list element</strong></em>
-<code>&lt;ul&gt;</code> structures text as a bullet point list, while
-the <em><strong>ordered list element</strong></em>
-<code>&lt;ol&gt;</code> structures text as a numbered list.</p>
-<p>The <em><strong>table element</strong></em>
-<code>&lt;table&gt;</code> structures text in a table format.</p>
-<p>Here is an example with these elements included:</p>
+<div id="example-2" class="section level2">
+<h2>Example 2</h2>
 <pre class="html"><code>&lt;html&gt;
 &lt;head&gt;
     &lt;title&gt;Example Page 2: Adding HTML Elements&lt;/title&gt;
@@ -472,51 +407,14 @@ the <em><strong>ordered list element</strong></em>
 
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<p>Save this file as <strong>example2.html</strong>.</p>
-<p>When you double click on the html file you have created, it should
-open in your <strong>default web browser</strong> software, and show the
-text as the Fig. 4.2</p>
 <div class="float">
 <img src="figs/lab4_e2.png" style="width:70.0%"
 alt="Figure 4.2: Screenshots of HTML Example 2" />
 <div class="figcaption">Figure 4.2: Screenshots of HTML Example 2</div>
 </div>
-<p><br></p>
 </div>
-</div>
-<div id="adding-stylesheets" class="section level2">
-<h2>Adding Stylesheets</h2>
-<p>We have created example pages with some content, but we have not
-added any presentational elements to this page. Typically, the default
-<strong>fonts</strong> and <strong>layout</strong> on web pages look
-very basic.</p>
-<blockquote>
-<p>Styles are applied to improve the page design. Styles can be applied
-to web page content by <strong>defining style rules in the HTML
-<em>header</em></strong>, or by <strong>linking to an external
-stylesheet</strong> (e.g. “example.css”) which contains similar
-content.</p>
-</blockquote>
-<p>It is also possible to define styles <strong>inline</strong> in the
-attributes of a tag, though this is generally regarded as <em>bad
-practice</em>.</p>
-<p>The following example shows how to change the font styling of the
-<code>body</code>, <code>h1</code> and <code>p</code> elements by
-defining styles within a style element in the <strong>page
-head</strong>. The styles are contained within <strong>curly
-brackets</strong> <code>{}</code>, with each property separated by a
-<strong>semi-colon</strong> <code>;</code>. The <code>h1</code> and
-<code>p</code> styles will apply to all instances of these tags. It is
-possible to define classes of styles to control which elements have
-styles applied, as shown in the <code>bold</code> class example below.
-Note American English spelling is used (e.g. ‘color’ not ‘colour’):</p>
-<blockquote>
-<p>The HEX values of different colors can be found here: <a
-href="https://htmlcolorcodes.com/"
-class="uri">https://htmlcolorcodes.com/</a></p>
-</blockquote>
-<div id="example-3" class="section level3">
-<h3>Example 3</h3>
+<div id="example-3" class="section level2">
+<h2>Example 3</h2>
 <pre class="html"><code>&lt;html&gt;
 &lt;head&gt;
     &lt;title&gt;Cascading Style Sheets (CSS) Example Page&lt;/title&gt;
@@ -555,30 +453,14 @@ p.italic {
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>Save this file as <strong>example3.html</strong>. Double click on the
-html file you have created to open it in your <strong>default web
-browser</strong> software. The web page should look similar to 4.3:</p>
 <div class="float">
 <img src="figs/lab4_e3.png" style="width:70.0%"
 alt="Figure 4.3: Screenshots of HTML Example 3" />
 <div class="figcaption">Figure 4.3: Screenshots of HTML Example 3</div>
 </div>
-<p><br></p>
 </div>
-<div id="example-4" class="section level3">
-<h3>Example 4</h3>
-<p>When styling the <strong>layout</strong> of a page, the
-<em><strong>divider or <code>&lt;div&gt;</code> element</strong></em> is
-very often used.</p>
-<blockquote>
-<p>The divider element defines a page block such as a header or footer
-or sidebar which can be positioned and styled on the page.</p>
-</blockquote>
-<p>To style the divider it needs to be defined by giving it a unique
-<strong>id</strong> attribute (this is different from the class
-attribute which refers to groups of elements and is not unique). The
-<strong>id</strong> is referred to in the header styles using the
-<strong>hashtag</strong> <code>#</code> symbol:</p>
+<div id="example-4" class="section level2">
+<h2>Example 4</h2>
 <pre class="html"><code>&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Cascading Style Sheets (CSS) Example Page with Dividers &lt;/title&gt;
@@ -636,39 +518,14 @@ p {
 
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<p>Save this file as <strong>example4.html</strong>. Double clicking on
-the html file you have created to open it in your <strong>default web
-browser</strong> software. The web page should look similar to 4.4:</p>
 <div class="float">
 <img src="figs/lab4_e4.png" style="width:70.0%"
 alt="Figure 4.4: Screenshots of HTML Example 4" />
 <div class="figcaption">Figure 4.4: Screenshots of HTML Example 4</div>
 </div>
-<p><br></p>
 </div>
-</div>
-<div id="html-and-javascript" class="section level2">
-<h2>HTML and JavaScript</h2>
-<p>Interactive and dynamic websites include <strong>scripts</strong> to
-respond to user behaviour and inputs. All interactive visualisation
-pages using scripts in one form or another. The most common web
-scripting language is <strong>JavaScript</strong>, and it is
-straightforward to <strong>include JavaScript within HTML
-pages</strong>.</p>
-<p>Note there are particular aspects of JavaScript on webpages
-(interpreted, asynchronous, strict web security) that make it different
-to running compiled code on your own machine. We will discuss these
-aspects further during the labs.</p>
-<blockquote>
-<p><strong>JavaScript</strong> is added to HTML pages using the
-<code>&lt;script&gt;</code> element. One of the most common JavaScript
-uses is to respond to a user input, such as pressing a button.</p>
-</blockquote>
-<p>In the following example, a function is run when the user clicks a
-button. The function changes the content and styling of a paragraph with
-the ids <code>demo</code> and <code>demo2</code>:</p>
-<div id="example-5" class="section level3">
-<h3>Example 5</h3>
+<div id="example-5" class="section level2">
+<h2>Example 5</h2>
 <pre class="html"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;JavaScript Example Page&lt;/title&gt;&lt;/head&gt;
@@ -698,60 +555,14 @@ function myFunction_color(){
 
 &lt;/body&gt;
 &lt;/html&gt; </code></pre>
-<p>Save this file as <strong>example5.html</strong>. Double clicking on
-the html file you have created to open it in your <strong>default web
-browser</strong> software. The web page should look similar to 4.5:</p>
 <div class="float">
 <img src="figs/lab4_e5.png" style="width:70.0%"
 alt="Figure 4.5: Screenshots of HTML Example 5" />
 <div class="figcaption">Figure 4.5: Screenshots of HTML Example 5</div>
 </div>
-<p><br></p>
 </div>
-</div>
-<div id="leaflet.js-mapping-example" class="section level2">
-<h2>Leaflet.js Mapping Example</h2>
-<p>We will look in detail at interactive mapping sites next week.
-Interactive mapping sites use all the <strong>JavaScript</strong> and
-<strong>stylesheet</strong> features we have discussed to create
-interactive mapping visualizations.</p>
-<p>An example of a simple mapping site is included below. It uses the
-<strong>Leaflet mapping library</strong>, which is a popular
-<strong>open source</strong> library for online interactive maps. It is
-a very <em>lightweight</em> and <em>straightforward</em> to use
-library.</p>
-<p>The API and documentation for <strong>Leaflet.js</strong> is here: <a
-href="http://leafletjs.com/" class="uri">http://leafletjs.com/</a></p>
-<p>Below is a simple html page to create a map with
-<strong>OpenStreetMap</strong> data as the <strong>background
-layer</strong>. There are some important features to note.</p>
-<ul>
-<li><p>Firstly, to use the Leaflet library, we need to refer to an
-<strong>external script</strong> containing the Leaflet library code,
-and a <strong>stylesheet</strong> for the Leaflet library. This is
-achieved in document header using <code>&lt;link&gt;</code> and
-<code>&lt;script&gt;</code> tags with links to online copies of the
-files. The integrity and crossorigin tags are relatively recent
-additions to HTML, intended to ensure that the external resource being
-loaded have not been modified from the original.</p></li>
-<li><p>Secondly, to create a <strong>full-screen</strong> map, we create
-a <code>#mapdiv</code> element that is given a width of 100%, absolute
-positioning, and borders of 0 to fill the entire browser
-screen.</p></li>
-<li><p>Thirdly, in the body of the page we need a
-<code>&lt;script&gt;</code> to define the map. The script calls the
-Leaflet commands to create the map. A <code>L.map</code> variable is
-invoked, specifying the <strong>latitude, longitude and zoom
-level</strong> of the map in the <code>setview</code> attributes. Then
-the <code>L.tileLayer</code> command specifies what mapping data will be
-used as the background layer, linking to a set of tiles on an online map
-server.</p></li>
-</ul>
-<p>Here we request the <strong>OpenStreetMap raster tiles
-layer</strong>, and add this layer to the map. The nature of online
-mapping data will all become clearer in next week’s session.</p>
-<div id="example-6" class="section level3">
-<h3>Example 6</h3>
+<div id="example-6" class="section level2">
+<h2>Example 6</h2>
 <pre class="html"><code>&lt;html&gt;
 &lt;head&gt;
 
@@ -789,18 +600,11 @@ L.tileLayer(&#39;http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#39;, {
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>Save this file as <strong>example6.html</strong>. Double clicking on
-the html file you have created to open it in your <strong>default web
-browser</strong> software. The web page should look similar to 4.6:</p>
 <div class="float">
 <img src="figs/lab4_e6.png" style="width:70.0%"
-alt="Figure 4.6: Screenshots of HTML Example 6" />
-<div class="figcaption">Figure 4.6: Screenshots of HTML Example 6</div>
+alt="Figure 4.1: Screenshots of HTML Example 6" />
+<div class="figcaption">Figure 4.1: Screenshots of HTML Example 6</div>
 </div>
-<p><br></p>
-<p>It’s possible to swap the tileLayer for another map layer that you
-want to use, for example the <strong>Carto All Black</strong> map layer
-(also created using OpenStreetMap data):</p>
 <pre class="html"><code>...
 
 L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png&#39;, {
@@ -809,36 +613,21 @@ L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png&#
     }).addTo(mymap);
 
 ...</code></pre>
-<p>If you can change the map tile successfully, the web page should look
-similar to:</p>
 <div class="float">
 <img src="figs/lab4_e7.png" style="width:70.0%"
 alt="Figure 4.7: Screenshots of HTML Example 7" />
 <div class="figcaption">Figure 4.7: Screenshots of HTML Example 7</div>
 </div>
-<p><br></p>
 </div>
-</div>
-<div id="diy-your-first-web-page" class="section level2">
-<h2>DIY Your First Web Page</h2>
-<p>Based on this tutorial, please try to adapt the code to DIY a simple
-web page to present a topic … You can use it to introduce your self, to
-express your interests in Cartography, etc.</p>
-<p><strong>Please submit your <code>.html</code> file with all
-supporting materials (e.g., figures) on Canvas</strong>.</p>
-</div>
-<div id="preparation-for-next-week" class="section level2">
-<h2>Preparation for Next Week</h2>
-<p>In addition to completing this lab, we are going to be using the
-mapping cloud service Mapbox next week to show the power of the latest
-online mapping tools.</p>
-<p>To use <strong>Mapbox</strong>, you would need to create a free
-Mapbox account. Go to the following link and create a free account: <a
-href="https://www.mapbox.com/"
-class="uri">https://www.mapbox.com/</a></p>
-<p>We would use <strong>GitHub</strong> to publish websites and make
-them accessible. Please also create a free GitHub account: <a
-href="https://github.com/" class="uri">https://github.com/</a></p>
+<div id="html-color" class="section level2">
+<h2>html color</h2>
+<p><a href="https://htmlcolorcodes.com/"
+class="uri">https://htmlcolorcodes.com/</a></p>
+The <code>&lt;style&gt;</code> element must be included inside the
+<head>
+<p>of the document. In general, it is better to put your styles in
+external stylesheets and apply them using <code>&lt;link&gt;</code>
+elements. Leaflet map provider.</p>
 </div>
 
 
