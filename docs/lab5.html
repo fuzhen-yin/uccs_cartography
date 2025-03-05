@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 5: Intro to Interactive Mapping (Part I)</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="website.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cartography Labs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="lab4.html">Lab 4</a>
+</li>
+<li>
+  <a href="lab5.html">Lab 5</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 5: Intro to Interactive Mapping (Part
+I)</h1>
+
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This Lab provides an introduction to basic Interactive mapping
+techniques using <strong>Leaflet</strong> and <strong>Mapbox</strong>.
+The aim is to provide an overview of techniques that you can use in your
+own spatial data visualizations. All the mapping software libraries
+discussed here have good online tutorials where you can explore further
+mapping examples beyond this lab:</p>
+<ul>
+<li><a href="http://leafletjs.com/examples.html"
+class="uri">http://leafletjs.com/examples.html</a></li>
+<li><a href="https://leafletjs.com/reference-1.6.0.html"
+class="uri">https://leafletjs.com/reference-1.6.0.html</a></li>
+<li><a href="https://www.mapbox.com/help/tutorials/"
+class="uri">https://www.mapbox.com/help/tutorials/</a></li>
+<li><a href="https://www.mapbox.com/mapbox-gl-js/example/simple-map/"
+class="uri">https://www.mapbox.com/mapbox-gl-js/example/simple-map/</a></li>
+<li><a href="https://www.mapbox.com/mapbox-gl-js/api"
+class="uri">https://www.mapbox.com/mapbox-gl-js/api</a></li>
+</ul>
+<p>And for a general HTML and JavaScript reference, a good site is:</p>
+<ul>
+<li><a href="https://www.w3schools.com/html/"
+class="uri">https://www.w3schools.com/html/</a></li>
+</ul>
+<div class="bluebox">
+<div class="left">
+<p><strong>Submission</strong></p>
+</div>
+<p>Please carefully read the instruction and play with the 6 examples.
+The zip file with Lab 5 materials can be found here: <a
+href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab5.zip"
+class="uri">https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab5.zip</a>.
+(Don’t know how to download the data? Please read: <a
+href="https://fuzhen-yin.github.io/uccs_cartography/lab4.html">Lab 4 -
+Overview</a>)</p>
+<p>At the end of the lab, you are required to:</p>
+<ul>
+<li>Replicate “Leaflet_Example4.html” to a different study area and use
+symbols (i.e., markers, polygons, circles) to illustrate a topic of
+interests with popup functions.</li>
+<li>Replicate “Mapbox_example6.html” using the same flow data but with
+different mapping styles.</li>
+</ul>
+<p>Please submit a zip with two .html files and any supporting documents
+(e.g., images) to Canvas.</p>
+</div>
+<p><br></p>
+</div>
+<div id="good-practice" class="section level2">
+<h2>Good Practice</h2>
+<ul>
+<li>Let’s first navigate to the course folder, and create a folder
+called <strong>lab5</strong>.</li>
+<li>You will need to use the HTML text editor (e.g. Brackets; Sublime
+Text) that you installed last week. The lab’s computers have Brackets
+installed.</li>
+</ul>
+</div>
+<div id="leaflet.js-examples" class="section level2">
+<h2>Leaflet.js Examples</h2>
+<p>Leaflet is a very popular open source library for online interactive
+maps. It is <strong>lightweight</strong> and
+<strong>straightforward</strong> to use, and is ideal for
+<strong>simpler mapping sites</strong>. The API and documentation for
+Leaflet.js can be found <a href="http://leafletjs.com/">here</a></p>
+<div id="example-1" class="section level3">
+<h3>Example 1</h3>
+<p>Below is a simple html page to create an interactive map with
+OpenStreetMap data (same example as last week). You can <strong>zoom
+around</strong> and the map layer will update.</p>
+<p>The important parts of the code are as follows:</p>
+<ul>
+<li>The Leaflet.js library is loaded in the <code>&lt;head&gt;</code>
+part of the page, using the <code>&lt;script&gt;</code> tag.</li>
+<li>Secondly the <strong>leaflet stylesheet</strong> is also requested
+using the <code>&lt;link&gt;</code> tag. The stylesheet controls the
+layout of different elements, and ensures the map and map controls
+appear in the right place on the page.</li>
+<li>The <strong>map</strong> itself is created in the
+<code>&lt;body&gt;</code> part of the page using a
+<code>&lt;div&gt;</code> tag to specify the size and location of the map
+element, and a <code>&lt;script&gt;</code> that calls the Leaflet
+commands to create the map. A <code>L.map</code> variable is invoked,
+specifying the <strong>latitude, longitude and zoom level</strong> of
+the map in the <code>setview</code> attributes. Then the
+<code>L.tileLayer</code> command specifies what data will be used as the
+background layer, linking to a set of tiles on an online map server.
+Here we request the OpenStreetMap raster tiles layer, and add this layer
+to the map.</li>
+</ul>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;title&gt;Leaflet Example 1&lt;/title&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&quot;
+   integrity=&quot;sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=&quot;
+   crossorigin=&quot;&quot;/&gt;
+
+ &lt;script src=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.js&quot;
+   integrity=&quot;sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=&quot;
+   crossorigin=&quot;&quot;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+    body { margin:0; padding:0; }
+    #mapdiv { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+&lt;div id=&quot;mapdiv&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var mymap = L.map(&#39;mapdiv&#39;).setView([38.8928, -104.8036], 16);
+
+L.tileLayer(&#39;http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#39;, {
+    maxZoom: 18,
+    attribution: &#39;Map data &amp;copy; &lt;a href=&quot;http://openstreetmap.org&quot;&gt;OpenStreetMap&lt;/a&gt;&#39;
+    }).addTo(mymap);
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+     </code></pre>
+<p>Note that in the code we are combining a variable declaration,
+instantiating the L.map object, and running the setView method in the
+same statement:</p>
+<blockquote>
+<p><code>var mymap = L.map('mapdiv').setView([38.8928, -104.8036], 16);</code></p>
+</blockquote>
+<p>This statement can alternatively be split into two lines, performing
+the same tasks:</p>
+<blockquote>
+<p><code>var mymap = L.map('mapdiv');</code> <br>
+<code>mymap.setView([38.8928, -104.8036], 16);</code></p>
+</blockquote>
+<p>Save this file as <strong>example1.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e1.png" style="width:70.0%"
+alt="Figure 5.1: Screenshots of Leaflet Example 1" />
+<div class="figcaption">Figure 5.1: Screenshots of Leaflet Example
+1</div>
+</div>
+</div>
+<div id="example-2" class="section level3">
+<h3>Example 2</h3>
+<p>It’s possible to swap the tileLayer for another raster map layer that
+you want to use, for example a Carto All Black tilelayer (also created
+using OpenStreetMap data):</p>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;title&gt;Leaflet Example 2&lt;/title&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&quot;
+   integrity=&quot;sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=&quot;
+   crossorigin=&quot;&quot;/&gt;
+
+ &lt;script src=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.js&quot;
+   integrity=&quot;sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=&quot;
+   crossorigin=&quot;&quot;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+    body { margin:0; padding:0; }
+    #mapdiv { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+&lt;div id=&quot;mapdiv&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var mymap = L.map(&#39;mapdiv&#39;).setView([38.8928, -104.8036], 16);
+
+L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png&#39;, {
+    maxZoom: 18,
+    attribution: &#39;&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors &amp;copy; &lt;a href=&quot;https://carto.com/attributions&quot;&gt;CARTO&lt;/a&gt;&#39;
+    }).addTo(mymap);
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+     </code></pre>
+<p>Save this file as <strong>example2.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e2.png" style="width:70.0%"
+alt="Figure 5.2: Screenshots of Leaflet Example 2" />
+<div class="figcaption">Figure 5.2: Screenshots of Leaflet Example
+2</div>
+</div>
+</div>
+<div id="example-3" class="section level3">
+<h3>Example 3</h3>
+<p>So far we have created the background layer to our map. Typically, we
+want to <strong>add some location data</strong> in the foreground. One
+simple method of doing this is to <strong>hand-code location
+data</strong> in our script, as the example below shows using the
+commands <code>L.marker</code> , <code>L.circle</code> and
+<code>L.polygon</code> .</p>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;title&gt;Leaflet Example 3&lt;/title&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&quot;
+   integrity=&quot;sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=&quot;
+   crossorigin=&quot;&quot;/&gt;
+
+ &lt;script src=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.js&quot;
+   integrity=&quot;sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=&quot;
+   crossorigin=&quot;&quot;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+    body { margin:0; padding:0; }
+    #mapdiv { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+&lt;div id=&quot;mapdiv&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var mymap = L.map(&#39;mapdiv&#39;).setView([38.8928, -104.8036], 16);
+
+L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png&#39;, {
+    maxZoom: 18,
+    attribution: &#39;&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors &amp;copy; &lt;a href=&quot;https://carto.com/attributions&quot;&gt;CARTO&lt;/a&gt;&#39;
+    }).addTo(mymap);
+
+
+var marker = L.marker([38.898586, -104.805672]).addTo(mymap);
+
+var circle = L.circle([38.889592, -104.791615], {
+    color: &#39;red&#39;,
+    fillColor: &#39;#f03&#39;,
+    fillOpacity: 0.5,
+    radius: 200
+}).addTo(mymap);
+
+
+var polygon = L.polygon([
+    [38.89569833939097, -104.80627386295626],
+    [38.89186674552239, -104.80462559978713],
+    [38.89083179638379, -104.79364069793745]
+]).addTo(mymap);
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Save this file as <strong>example3.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e3.png" style="width:70.0%"
+alt="Figure 5.3: Screenshots of Leaflet Example 3" />
+<div class="figcaption">Figure 5.3: Screenshots of Leaflet Example
+3</div>
+</div>
+</div>
+<div id="example-4" class="section level3">
+<h3>Example 4</h3>
+<p>Now, we add popup interactivity to the map by using the functions
+<code>bindPopup</code> and <code>openPopup</code>. It follows the same
+html syntax when adding hyperlink such as
+<code>&lt;a href='https://www.uccs.edu/'&gt;Link to UCCS&lt;/a&gt;</code>.</p>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;title&gt;Leaflet Example 4&lt;/title&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&quot;
+   integrity=&quot;sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=&quot;
+   crossorigin=&quot;&quot;/&gt;
+
+ &lt;script src=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.js&quot;
+   integrity=&quot;sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=&quot;
+   crossorigin=&quot;&quot;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+    body { margin:0; padding:0; }
+    #mapdiv { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+&lt;div id=&quot;mapdiv&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var mymap = L.map(&#39;mapdiv&#39;).setView([38.8928, -104.8036], 16);
+
+L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png&#39;, {
+    maxZoom: 18,
+    attribution: &#39;&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors &amp;copy; &lt;a href=&quot;https://carto.com/attributions&quot;&gt;CARTO&lt;/a&gt;&#39;
+    }).addTo(mymap);
+
+
+var marker = L.marker([38.898586, -104.805672]).addTo(mymap);
+
+var circle = L.circle([38.889592, -104.791615], {
+    color: &#39;red&#39;,
+    fillColor: &#39;#f03&#39;,
+    fillOpacity: 0.5,
+    radius: 200
+}).addTo(mymap);
+
+var polygon = L.polygon([
+    [38.89569833939097, -104.80627386295626],
+    [38.89186674552239, -104.80462559978713],
+    [38.89083179638379, -104.79364069793745]
+]).addTo(mymap);
+
+
+polygon.bindPopup(&quot;Hello World! &lt;br&gt; This is the Main Campus of UCCS. &lt;br&gt; &lt;a href=&#39;https://www.uccs.edu/&#39;&gt;Link to UCCS&lt;/a&gt;&quot;).openPopup();
+marker.bindPopup(&quot;A marker showing the Roaring Fork dining hall&quot;)
+circle.bindPopup(&quot;Here is the UCCS Farm!&quot;)
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Save this file as <strong>example4.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e4.png" style="width:70.0%"
+alt="Figure 5.4: Screenshots of Leaflet Example 4" />
+<div class="figcaption">Figure 5.4: Screenshots of Leaflet Example
+4</div>
+</div>
+</div>
+<div id="example-5" class="section level3">
+<h3>Example 5</h3>
+<p><strong>Hand-coding location features</strong> is not a good way to
+handle larger datasets. We can add medium sized spatial datasets using
+the <strong>GeoJSON</strong> format, a popular text-based format for
+exchanging vector spatial data in JavaScript Object Notation. See <a
+href="https://geojson.org/">geojson.org</a> for more information.</p>
+<p>You can create <strong>GeoJSON</strong> files easily in QGIS or
+ArcGIS from any spatial data file (<em>“Export-&gt;Save Features
+As”</em> for QGIS, or <em>“Output to GeoJSON”</em> for ArcGIS ).
+Alternatively Google <em>“convert to geojson”</em> and you can find a
+lot of online data converters.</p>
+<p>We will discuss importing data files on the web using APIs later in
+the course. The easiest way to add a <strong>GeoJSON</strong> file to a
+<strong>Leaflet</strong> map is:</p>
+<blockquote>
+<p>to edit the <strong>GeoJSON</strong> file to create a
+<strong>.js</strong> file, and wrap the GeoJSON data inside
+<code>var = myvariablename [….];</code> (see the
+<code>elpaso_2022_waterbody_area.js</code> example file included in the
+lab materials).</p>
+</blockquote>
+<p>To view the <code>elpaso_2022_waterbody_area.js</code>, <strong>right
+click</strong> and <strong>open with</strong> any text editors (e.g.,
+Brackets, Sublime Text, or Notepad.)</p>
+<p>To load an external GeoJSON file without editing, you need to add
+some asynchronous data loading functionality to Leaflet, such as the
+Leaflet AJAX plugin or using JQuery. The example below loads the file
+<code>elpaso_2022_waterbody_area.js</code> a local file with the address
+shown in the code below.</p>
+<blockquote>
+<p><code>&lt;script src="elpaso_2022_waterbody_area.js"&gt;&lt;/script&gt;</code></p>
+</blockquote>
+<p>This example adds some <strong>water body data</strong> (from the
+<code>elpaso_2022_waterbody_area.js</code> file) on top of our
+background map. The water bodies were added using the
+<code>L.geoJson</code> constructor. The function
+<code>onEachFeature</code> runs for each feature, which is styled using
+the <code>layer.setStyle</code> command in the code.</p>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;title&gt;Leaflet Example 5&lt;/title&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&quot;
+   integrity=&quot;sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=&quot;
+   crossorigin=&quot;&quot;/&gt;
+
+ &lt;script src=&quot;https://unpkg.com/leaflet@1.9.4/dist/leaflet.js&quot;
+   integrity=&quot;sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=&quot;
+   crossorigin=&quot;&quot;&gt;&lt;/script&gt;
+
+   &lt;script src=&quot;elpaso_2022_waterbody_area.js&quot;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+    body { margin:0; padding:0; }
+    #mapdiv { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+&lt;div id=&quot;mapdiv&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var mymap = L.map(&#39;mapdiv&#39;).setView([38.859717, -104.801512], 12);
+
+L.tileLayer(&#39;https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png&#39;, {
+    maxZoom: 18,
+    attribution: &#39;&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors &amp;copy; &lt;a href=&quot;https://carto.com/attributions&quot;&gt;CARTO&lt;/a&gt;&#39;
+    }).addTo(mymap);
+
+var water_js = new L.geoJson(water_area,{
+    onEachFeature: onEachFeature
+}).addTo(mymap);
+
+function onEachFeature(feature, layer){
+    layer.setStyle({
+        fillColor:&#39;skyblue&#39;,
+        fillOpacity: 0.5,
+        weight:1,
+        color:&#39;darkblue&#39;,
+        opacity:1
+    })
+}
+
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Save this file as <strong>example5.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e5.png" style="width:70.0%"
+alt="Figure 5.5: Screenshots of Leaflet Example 5" />
+<div class="figcaption">Figure 5.5: Screenshots of Leaflet Example
+5</div>
+</div>
+<p><br> The <strong>GeoJSON</strong> approach will work for relatively
+<strong>small spatial data</strong> files of a few megabytes. When your
+files get larger then this text based approach will not scale and the
+website performance will be slow. You will need to use a different
+<strong>scalable</strong> approach like <strong>vector tiles</strong>,
+so that the spatial data is selected depending on the location and zoom
+level that the user is viewing.</p>
+<p>If you want to add interactivity and further features to your
+<strong>Leaflet</strong> map, then you can follow the online tutorials
+here: <a href="https://leafletjs.com/examples.html"
+class="uri">https://leafletjs.com/examples.html</a></p>
+</div>
+</div>
+<div id="mapbox-introduction" class="section level2">
+<h2>Mapbox Introduction</h2>
+<ul>
+<li>Go to <a href="https://www.mapbox.com/">Mapbox.com</a> (you will
+need to create a free account if you haven’t already), login and click
+on <strong>Data Manager</strong> on the left. Then click on <strong>New
+Tileset</strong>, and <strong>Select a File</strong>.</li>
+<li>Select the data file <code>JTW_GB_MSOAflows_2011_50plus.zip</code>
+downloaded from <a
+href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab5.zip.">Lab
+5 materials</a></li>
+</ul>
+<p>There will be a delay while the file is uploaded and processed into
+Mapbox vector tiles. When it is complete, you will get a notification
+saying the upload has succeeded, and there will be a new Tileset on the
+page with a name like <code>JTW_GB_MSOAflows_2011_50plus-xxx</code>.
+Click on it to see the details.</p>
+<p><img src="figs/lab5_mapbox.png" style="width:100.0%"
+alt="Figure 5.6: Map Box - Creating a new Tile Size" /> <br> This
+Tileset page has important information such as the <strong>Map
+ID</strong> and the <strong>name</strong> (which are used to show this
+layer in an HTML page using <strong>mapbox.gl</strong>).</p>
+<ul>
+<li>It also has the <strong>zoom extent</strong> of the layer. There is
+a maximum number of features that can be included in each vector tile,
+and as you zoom out eventually you hit this limit and the layer is no
+longer displayed.</li>
+<li>The vector tiles include the attribute information (columns) from
+the shapefile, so one quick way to minimize the problem of too narrow a
+zoom extent is to limit the number of attributes in the original
+shapefile.</li>
+</ul>
+<p>A more advanced way is to use the Mapbox software Tippecanoe to
+control how features are dropped at low zoom levels, allowing a wider
+zoom extent.</p>
+<div class="float">
+<img src="figs/lab5_mapbox_2.png" style="width:100.0%"
+alt="Figure 5.7: Map Box - Tileset Name &amp; ID" />
+<div class="figcaption">Figure 5.7: Map Box - Tileset Name &amp;
+ID</div>
+</div>
+<p><br></p>
+</div>
+<div id="designing-a-flowmap-in-mapbox-studio" class="section level2">
+<h2>Designing a Flowmap in Mapbox Studio</h2>
+<p>Now we are going to create a map of the flow data in Mapbox studio.
+Each map design is called a <strong>style</strong> in Mapbox. - Click on
+the <strong>Style Editor</strong> on the left panel. Then the
+<strong>arrow</strong> near <strong>New Style</strong> button to create
+a new style using <strong>Classic Template</strong>.</p>
+<div class="float">
+<img src="figs/lab5_mapbox_3.png" style="width:100.0%"
+alt="Figure 5.8: Map Box - Create a new mapping style" />
+<div class="figcaption">Figure 5.8: Map Box - Create a new mapping
+style</div>
+</div>
+<p><br></p>
+<p>There are a wide selection of style templates to choose from, mainly
+using OpenStreetMap (OSM) data. It is interesting to explore these
+different styles for different projects, with the minimalist
+<strong>Monochrome</strong> styles generally the default for data
+visualizations. For this example, we want to use the <strong>Monochrome-
+Dark</strong> style.</p>
+<div class="float">
+<img src="figs/lab5_mapbox_4.png" style="width:100.0%"
+alt="Figure 5.9: Map Box - Examples of Classic Templates" />
+<div class="figcaption">Figure 5.9: Map Box - Examples of Classic
+Templates</div>
+</div>
+<p><br></p>
+<p>You will then be taken to the Mapbox studio interface for designing
+background mapping. On the left hand side are all the OSM layers, and on
+the right hand side is the appearance of the map design (just like in
+GIS software).</p>
+<ul>
+<li>Navigate the map to center on the UK.</li>
+<li>Press the <strong>Add Layer</strong> button (or the
+<strong>+</strong> symbol) at the top left to add a <strong>Custom
+Layer</strong> using <strong>journey-to-work flows</strong> Tileset we
+created earlier (under the name <code>JTW_GB_MSOAflows_2011</code>.</li>
+</ul>
+<div class="float">
+<img src="figs/lab5_mapbox_5.png" style="width:100.0%"
+alt="Figure 5.10: Map Box - Adding Customized Layer" />
+<div class="figcaption">Figure 5.10: Map Box - Adding Customized
+Layer</div>
+</div>
+<p><br></p>
+<div class="float">
+<img src="figs/lab5_mapbox_6.png" style="width:100.0%"
+alt="Figure 5.11: Map Box - Adding the Flow Data" />
+<div class="figcaption">Figure 5.11: Map Box - Adding the Flow
+Data</div>
+</div>
+<p><br></p>
+<p>When added, the <strong>flows</strong> layer will appear on the
+<strong>left-hand</strong> layers panel. Next we are going to
+<strong>style</strong> this layer. Click on the layer itself, the style
+panel will appear.</p>
+<ul>
+<li>Firstly, change the color to something bright like cyan or
+orange.</li>
+<li>Next create a rule to vary the width of the flow lines according to
+the number of commuters. To do this, click on <strong>Width</strong> and
+<strong>Style across Data Range</strong>. This allows you to vary the
+style properties according to a numerical attribute.</li>
+<li>We want the width to increase as the number of commuters increases.
+Edit the <strong>stop</strong> so that the width increases to about
+<strong>8px</strong> when the number of commuters reaches 500. -Next, we
+want to edit the opacity so that the map highlights areas where many
+features overlap. Please play with the opacity values until you think it
+the map looks good.</li>
+</ul>
+<div class="float">
+<img src="figs/lab5_mapbox_7.png" style="width:100.0%"
+alt="Figure 5.12: Map Box - Changing Line Width &amp; Opacity" />
+<div class="figcaption">Figure 5.12: Map Box - Changing Line Width &amp;
+Opacity</div>
+</div>
+<p><br></p>
+<p>You can make many <strong>more adjustments</strong> to improve your
+map. For example:</p>
+<ul>
+<li>it makes sense to put the flow data layer below the city labels to
+improve legibility (<strong>hint: click &amp; drag</strong>)</li>
+<li>By default, Mapbox displays labels for small towns. You can change
+this to only showing large cities by changing the filter on the
+<strong>settlement-label</strong> layer under the
+<strong>place-labels</strong> layer.</li>
+<li>You can also make the background darker (<strong>land</strong>
+layers) to increase the map contrast;</li>
+<li>and you can hide unwanted layers like roads by using the
+<strong>eye</strong> icon at the top left to reduce the clutter of the
+map.</li>
+</ul>
+<p>Your final map should appear similar to the map below.</p>
+<div class="float">
+<img src="figs/lab5_mapbox_8.png" style="width:100.0%"
+alt="Figure 5.13: Map Box - Publish the Map" />
+<div class="figcaption">Figure 5.13: Map Box - Publish the Map</div>
+</div>
+<p><br></p>
+</div>
+<div id="publishing-your-flowmap" class="section level2">
+<h2>Publishing Your Flowmap</h2>
+<p>It makes sense to rename the style into something more descriptive
+than <strong>Monochrome</strong>’, for example <strong>UK_Flow
+Map</strong>. The <strong>Publish</strong> button at the top right will
+save your style edits.</p>
+<p>Then press the <strong>Share</strong> button. This includes a Preview
+URL to view your style. It is better to use the <strong>Developer
+resources</strong> to use this map style on your own HTML page.</p>
+<div class="float">
+<img src="figs/lab5_mapbox_9.png" style="width:100.0%"
+alt="Figure 5.14: Map Box - Share to Obtain Developer Resources" />
+<div class="figcaption">Figure 5.14: Map Box - Share to Obtain Developer
+Resources</div>
+</div>
+<p><br></p>
+<div id="example-6" class="section level3">
+<h3>Example 6</h3>
+<p>This is shown in ‘Mapbox_example6.html’. To view your own style, you
+will need to insert your <strong>access token</strong> and your
+<strong>Style URL</strong> in the example 6 code as shown below.
+<strong>Please submit the .html file of your final stylized flow as part
+of your Lab 5 assignment</strong>.</p>
+<pre class="html"><code>
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 6- UK Flowmap 2011&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;                   //Mapbox Accesstoken
+
+    var map = new mapboxgl.Map({
+        container: &#39;map&#39;, // container id
+        style: &#39;mapbox://styles/fzing/cm7vgvvn5001l01rhbhmf55np&#39;, // stylesheet URL, the style that you&#39;ve created
+        center: [-2.855366, 53.273659], // starting position [lng, lat]
+        zoom: 6 // starting zoom
+    });
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Save this file as <strong>example6.html</strong>.</p>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab5_e6.png" style="width:70.0%"
+alt="Figure 5.15: Screenshots of MapBox Example 6" />
+<div class="figcaption">Figure 5.15: Screenshots of MapBox Example
+6</div>
+</div>
+<p><br></p>
+</div>
+</div>
+<div id="good-job-on-lab-5" class="section level2">
+<h2>Good Job on Lab 5!</h2>
+<p>Please submit a zip with two .html files and any supporting documents
+(e.g., images) to Canvas.</p>
+<ul>
+<li>One .html file to replicate “Leaflet_Example4.html” to a different
+study area and use symbols (i.e., markers, polygons, circles) to
+illustrate a topic of interests with popup functions.</li>
+<li>One .html file to replicate “Mapbox_example6.html” using the same
+flow data but with different mapping styles.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
