@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 6: Intro to Interactive Mapping (Part II)</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="website.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cartography Labs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="lab4.html">Lab 4</a>
+</li>
+<li>
+  <a href="lab5.html">Lab 5</a>
+</li>
+<li>
+  <a href="lab6.html">Lab 6</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 6: Intro to Interactive Mapping (Part
+II)</h1>
+
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<div class="bluebox">
+<div class="left">
+<p><strong>Submission</strong></p>
+</div>
+<p>Please carefully read the instruction and play with <strong>Mapbox
+examples 7-11</strong>. These examples are using the same data and are
+developed from a simple interactive map (e.7) to more complicated one
+(e.11) with more functions. Please carefully compare them and understand
+what are the new functions &amp; scripts have been added gradually.</p>
+<p>The zip file with Lab 6 materials can be found here: <a
+href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab6.zip"
+class="uri">https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab6.zip</a></p>
+<p>(Don’t know how to download the data? Please read: <a
+href="https://fuzhen-yin.github.io/uccs_cartography/lab4.html">Lab 4 -
+Overview</a>)</p>
+<p>At the end of the lab, you are required to:</p>
+<ul>
+<li>To replicate “Mapbox_example<strong>8</strong>.html” using the same
+“Bike Route” data and “Pedestrian &amp; Bicycle Counts” data but with
+your own customized mapping styles.</li>
+<li>In your “Mapbox_example<strong>9</strong>.html”, please try to
+change:
+<ul>
+<li>circle size &amp; colors</li>
+<li>label size &amp; color</li>
+</ul></li>
+<li>Base on the “Mapbox_example<strong>10</strong>.html”, please create
+another interactive map. In the new map, please change the
+<strong>slider of years</strong> to the <strong>slider of
+seasons</strong>. Specifically, when users change the sliders, the map
+can display counts of pedestrian &amp; bikes in different seasons.<br />
+# <em><strong>Hint</strong>: In the file
+“denver_count_ped_bike.geojson”, there is one column called “season”
+that includes four unique values
+[“Spring”,“Summer”,“Fall”,“Winter”]</em></li>
+</ul>
+<p>Please submit a zip with <strong>THREE</strong> .html files and any
+supporting documents (e.g., images) to Canvas.</p>
+</div>
+<p><br></p>
+</div>
+<div id="interactive-map-example---denver-bike-data"
+class="section level2">
+<h2>Interactive Map Example - Denver Bike Data</h2>
+<p>Our first Mapbox map (<a
+href="https://fuzhen-yin.github.io/uccs_cartography/lab5.html#Mapbox_Introduction">Example
+6: Flow Map</a> in Lab 4) has navigational interactivity only- the user
+can pan and zoom, but cannot change the data layers or styling of the
+map. The next example illustrates some more advanced data
+interactivity.</p>
+<p>The data sources are:</p>
+<ul>
+<li>Denver <a
+href="https://opendata-geospatialdenver.hub.arcgis.com/datasets/f651766e877249108933f9f9f3196b69_244/explore?location=39.737255%2C-104.887634%2C9.99">Bike
+Facilities</a></li>
+<li>Denver <a
+href="https://data.drcog.org/dataset/bicycle-and-pedestrian-counts">Counts
+of Pedestrian &amp; Bicycle</a></li>
+</ul>
+</div>
+<div id="creating-bike-data-tilesets" class="section level2">
+<h2>Creating Bike Data Tilesets</h2>
+<p>Similar to the earlier <a
+href="https://fuzhen-yin.github.io/uccs_cartography/lab5.html#Mapbox_Introduction">Flow
+Map</a>, we are going to add <strong>Denver Bike Facilities</strong> and
+<strong>Bike &amp; Pedestrian Count</strong> as Tilesets which will be
+hosted on Mapbox.</p>
+<p>After downloading and unzipping <a
+href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab6.zip">Lab
+6 Materials</a>, you can find two <em>geojson</em> files:</p>
+<ul>
+<li>denver_bike_facilities.geojson</li>
+<li>denver_count_ped_bike.geojson</li>
+</ul>
+<p><strong>Hint</strong>：If you want to check what’s in the data, right
+click the <em>geojson</em> file and open it with a text editor (e.g.,
+brackets / sublime text / notepad)…</p>
+<p>Next upload these dataset to Mapbox individually as “New Tileset”.
+<em>There will be delay while Mapbox converts these files into vector
+tiles</em> (see the screenshot below).</p>
+<p><img src="figs/lab6_mapbox_1.png" style="width:100.0%"
+alt="Figure 6.X: Uploading .geojson dataset as a new tileset" />
+<br></p>
+<p>Each tileset has a unique <strong>Tileset ID</strong> and
+<strong>NAME</strong>.</p>
+<p><img src="figs/lab6_mapbox_2.png" style="width:100.0%"
+alt="Figure 6.X: Tileset ID and NAME" /> <br></p>
+<p>Click on the tileset to see the <strong>attributes /
+properties</strong> &amp; its <strong>Zoom extent</strong>.</p>
+<p><img src="figs/lab6_mapbox_2_2.png" style="width:100.0%"
+alt="Figure 6.X: Tileset’s Attributes" /> <br></p>
+</div>
+<div id="creating-background-map-style" class="section level2">
+<h2>Creating Background Map Style</h2>
+<p>Again we are going to use Mapbox Studio to create the
+<strong>background map</strong> for our Bike Data visualization.</p>
+<ul>
+<li>Click on the <strong>Style Editor</strong> on the left panel. Then
+the <strong>arrow</strong> near <strong>New Style</strong> button to
+create a new style using <strong>Classic Template</strong>.</li>
+</ul>
+<p><img src="figs/lab6_mapbox_3.png" style="width:100.0%"
+alt="Figure 6.X: Map Box - Create a new mapping style" /> <br></p>
+<p>The Mapbox Studio interface gives you control over all the
+OpenStreetMap layers that make up the global Light background map.
+Let’s</p>
+<ul>
+<li>Give a meaningful name to the map style</li>
+<li>Navigate to the study area ‘Denver’</li>
+<li>Add the <strong>Denver Bike Facilities</strong> tileset</li>
+</ul>
+<p><img src="figs/lab6_mapbox_5.png" style="width:100.0%"
+alt="Figure 6.X: Adding a new tileset as a custom layer" /> <br></p>
+<p>Next, we are going to style the <strong>Denver Bike
+Facilities</strong> layer and <strong>background</strong> data as you
+like for the map.</p>
+<ul>
+<li>One important option is the ability to <strong>adjust values
+according to the zoom level</strong>. Often we want features to become
+larger/wider as the user zooms in. So for example, the width of the Bike
+Facilities increases from 1px to 5px between zoom levels 11 and 18-</li>
+</ul>
+<p><img src="figs/lab6_mapbox_6.png" style="width:100.0%"
+alt="Figure 6.X: style the Denver Bike Facilities: Line Width" />
+<br></p>
+<p>It’s possible to customize the <strong>Denver Bike
+Facilities</strong> layer by giving different colors to different types
+of bike facilities.</p>
+<ul>
+<li>Under the <strong>Color</strong> tab in the <strong>Denver Bike
+Facilities</strong> layer, choose <strong>style with data
+conditions</strong> using the variable
+<strong>EXISTING_FACILITY</strong></li>
+<li>Then, for records with data field “EXISTING_FACILITY” equals to
+<strong>CHOOSE AN AVALABLE VALUE</strong>, select a color and click
+<strong>DONE</strong></li>
+<li>Then, <strong>add another condition</strong> to continue until
+covering all available values.</li>
+</ul>
+<p><img src="figs/lab6_mapbox_8.png" style="width:100.0%"
+alt="Figure 6.X: Style Layer with data conditions" /> <br></p>
+<div class="float">
+<img src="figs/lab6_mapbox_10.png" style="width:100.0%"
+alt="Figure 6.X: Style Layer with data conditions - 2" />
+<div class="figcaption">Figure 6.X: Style Layer with data conditions -
+2</div>
+</div>
+<p><br></p>
+<p><img src="figs/lab6_mapbox_11.png" style="width:100.0%"
+alt="Figure 6.X: Style Layer with data conditions - 3" /> <br></p>
+<p>To customize base maps, you can also use the <strong>eye</strong>
+symbol to hide layers (e.g., hide labels). <img
+src="figs/lab6_mapbox_12.png" style="width:100.0%"
+alt="Figure 6.X: Hide layers" /> <br></p>
+<p>Finally, when you are happy with your map style, you can:</p>
+<ul>
+<li>press the <strong>Publish Your Style</strong> button at the top
+right of the page.</li>
+<li>Then press the <strong>Share</strong> button. This includes a
+Preview URL to view your style. It is better to use the
+<strong>Developer resources</strong> to use this map style on your own
+HTML page.</li>
+</ul>
+<p>The full <strong>documentation</strong> for Mapbox Studio can be
+found here: <a href="https://www.mapbox.com/help/studio-manual/"
+class="uri">https://www.mapbox.com/help/studio-manual/</a></p>
+<p><img src="figs/lab6_mapbox_13.png" style="width:100.0%"
+alt="Figure 6.X: Map Box - Publish &amp; Share to Obtain Developer Resources" />
+<br></p>
+</div>
+<div id="mapbox-gl-javascript-library" class="section level2">
+<h2>Mapbox GL JavaScript Library</h2>
+<p><strong>Mapbox GL JS</strong> is the main client-side
+<strong>JavaScript</strong> library for viewing maps created using
+Mapbox tools. A major difference with other mapping libraries is that it
+is based on <strong>WebGL</strong>, a more powerful graphics standard
+than standard HTML pages.</p>
+<blockquote>
+<p>WebGL (Web Graphics Library) is a JavaScript API for rendering
+high-performance interactive 3D and 2D graphics within any compatible
+web browser without the use of plug-ins</p>
+</blockquote>
+<p>This means that the library can handle more advanced graphics like
+animations and 3D data. Note you can rotate and tilt Mapbox GL maps by
+holding down your right mouse button and moving the mouse (this feature
+can also be turned off on your own maps).</p>
+<div id="example-7" class="section level3">
+<h3>Example 7</h3>
+<p>First of all, we will create a simple <strong>Mapbox.gl</strong> page
+that displays the background <strong>Bike Facilities</strong> map we
+created in Mapbox Studio. You will notice the code has many similarities
+to the Leaflet pages we created earlier-</p>
+<p>Mapbox has a basic security system using access tokens. You will need
+to replace the <strong>mapboxgl.accessToken</strong> with your own
+token, and <strong>mapbox styleID</strong> with your base map ID. Please
+refer to screenshot above to obtain the two values.</p>
+<pre class="html"><code>
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 7- Denver Bike Lanes&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;  //Put your mapbox access token here
+
+        // Load a new map in the &#39;map&#39; HTML div
+        var map = new mapboxgl.Map({
+            container: &#39;map&#39;, // container id
+            style: &#39;mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0&#39;, // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+     </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab6_e7.png" style="width:100.0%"
+alt="Figure 6.X: Screenshots of Mapbox Example 7" />
+<div class="figcaption">Figure 6.X: Screenshots of Mapbox Example
+7</div>
+</div>
+<p><br></p>
+</div>
+<div id="example-8" class="section level3">
+<h3>Example 8</h3>
+<p>Next we are going to add the <strong>Counts of Pedestrian &amp;
+Bicycle</strong> data as a new layer on top of our <strong>Bike
+Facility</strong> basemap. The <strong>Denver_count_ped_bike</strong>
+data is a Tileset, not a style, and we are going to
+<strong>style</strong> the data on the client-side in the JavaScript
+code. This gives us more flexibility to change the style interactively
+using JavaScript-</p>
+<blockquote>
+<p>The new code is placed inside a function
+<code>map.on('load', function() { … });</code>.</p>
+</blockquote>
+<p>This is an example of an asynchronous JavaScript function- it is run
+after the background map style has loaded. In this library we can only
+add layers after the main map has been loaded on the page. We create a
+<strong>new CIRCLE layer</strong> from the
+<strong>Denver_count_ped_bike</strong> Tileset. This layer is a
+proportional circle map, where the <strong>radius of the circle</strong>
+depends on the <code>count_</code> field from the original shapefile
+(this field is <em>count of pedestrian &amp; bicycle</em> from 2013 -
+2023).</p>
+<blockquote>
+<p>The <code>stops</code> property in Mapbox.gl creates a linear
+function between zoom levels, just like we used earlier in Mapbox
+Studio.</p>
+</blockquote>
+<pre class="html"><code>
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 8- Proportional Circles&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;  //Put your mapbox access token here
+
+        // Load a new map in the &#39;map&#39; HTML div
+        var map = new mapboxgl.Map({
+            container: &#39;map&#39;, // container id
+            style: &#39;mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0&#39;, // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+        
+        map.on(&#39;load&#39;, function() {
+
+            // Add a CIRCLE layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;type&#39;:&#39;circle&#39;,
+                &#39;source&#39;:{
+                    type:&#39;vector&#39;,
+                    url:&#39;mapbox://fzing.5hoyhzja&#39; // Your Mapbox tileset Map ID
+                },
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;, // name of tilesets
+                &#39;layout&#39;:{
+                    &#39;visibility&#39;: &#39;visible&#39;
+                },
+                &#39;paint&#39;: {
+                    &#39;circle-color&#39;:&#39;#fffef7&#39;,
+                    &#39;circle-opacity&#39;:0.2,
+                    &#39;circle-stroke-width&#39;:{
+                        stops: [[8,0.5], [100,5], [500,10]]
+                    },
+                    &#39;circle-stroke-color&#39;:&#39;#000&#39;,          //points on the graph
+                    &#39;circle-stroke-opacity&#39;:0.5,
+                    &#39;circle-radius&#39;:{
+                        property:&#39;count_&#39;,
+                        stops:[
+                            [{zoom:9, value:0}, 3],
+                            [{zoom:9, value:4100}, 10],
+                            [{zoom:12, value:0}, 4],
+                            [{zoom:12, value:4100}, 80],
+                            [{zoom:16, value:0}, 6],
+                            [{zoom:16, value:4100}, 150],
+                        ]                                 //setting up proportional circle
+                    }
+                }
+            });
+            
+
+        })
+
+
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+     </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab6_e8.png" style="width:100.0%"
+alt="Figure 6.X: Screenshots of Mapbox Example 8" />
+<div class="figcaption">Figure 6.X: Screenshots of Mapbox Example
+8</div>
+</div>
+<p><br></p>
+</div>
+<div id="example-9" class="section level3">
+<h3>Example 9</h3>
+<p>Next, we are going to add another <strong>LABEL</strong> layer from
+the <strong>Denver_count_ped_bike</strong> Tileset. This labels the
+number of bicycle &amp; pedestrian counts at different times during 2013
+- 2023. The same variable as is used for the circle sizes. Your map
+should appear similar to the map below-</p>
+<pre class="html"><code>
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 9 - Label&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;  //Put your mapbox access token here
+
+        // Load a new map in the &#39;map&#39; HTML div
+        var map = new mapboxgl.Map({
+            container: &#39;map&#39;, // container id
+            style: &#39;mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0&#39;, // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+        
+        map.on(&#39;load&#39;, function() {
+
+            // Add a CIRCLE layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;type&#39;:&#39;circle&#39;,
+                &#39;source&#39;:{
+                    type:&#39;vector&#39;,
+                    url:&#39;mapbox://fzing.5hoyhzja&#39; // Your Mapbox tileset Map ID
+                },
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;, // name of tilesets
+                &#39;layout&#39;:{
+                    &#39;visibility&#39;: &#39;visible&#39;
+                },
+                &#39;paint&#39;: {
+                    &#39;circle-color&#39;:&#39;#fffef7&#39;,
+                    &#39;circle-opacity&#39;:0.2,
+                    &#39;circle-stroke-width&#39;:{
+                        stops: [[8,0.5], [100,5], [500,10]]
+                    },
+                    &#39;circle-stroke-color&#39;:&#39;#000&#39;,          //points on the graph
+                    &#39;circle-stroke-opacity&#39;:0.5,
+                    &#39;circle-radius&#39;:{
+                        property:&#39;count_&#39;,
+                        stops:[
+                            [{zoom:9, value:0}, 3],
+                            [{zoom:9, value:4100}, 10],
+                            [{zoom:12, value:0}, 4],
+                            [{zoom:12, value:4100}, 80],
+                            [{zoom:16, value:0}, 6],
+                            [{zoom:16, value:4100}, 150],
+                        ]                                 //setting up proportional circle
+                    }
+                }
+            });
+
+            // Add a LABEL layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike_label&#39;,
+                &#39;type&#39;:&#39;symbol&#39;,
+                &#39;source&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;,  // name of tilesets
+                &#39;layout&#39;:{
+                    &#39;text-field&#39;:&#39;{count_}&#39;,
+                    &#39;text-size&#39;:{
+                        stops:[[0, 0.5],[100, 70],[500,300]]
+                    }
+                },
+                &#39;paint&#39;:{
+                    &#39;text-color&#39;:&#39;black&#39;
+                }
+
+            })
+
+        })
+
+
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+     </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab6_e9.png" style="width:100.0%"
+alt="Figure 6.X: Screenshots of Mapbox Example 9" />
+<div class="figcaption">Figure 6.X: Screenshots of Mapbox Example
+9</div>
+</div>
+<p><br></p>
+</div>
+</div>
+<div id="adding-user-interaction-and-dynamic-styling-to-mapbox"
+class="section level2">
+<h2>Adding User Interaction and Dynamic Styling to Mapbox</h2>
+<p>The advantage of styling data using JavaScript on the client-side,
+rather than preparing our styles in advance in Mapbox Studio, is that we
+can <strong>change the styling dynamically in response to user
+interaction</strong>.</p>
+<blockquote>
+<p>Our next example, which is rather longer, creates an
+<strong>interactive time-slider</strong>.</p>
+</blockquote>
+<ul>
+<li>When the user moves the time-slider it triggers a function which
+changes which variable (column in the data table) the
+<strong>denver_count_ped_bike</strong> layers are displaying, so that
+the user can change the data year that is shown on the map.</li>
+<li>This is an <strong>event-based structure</strong>, which is typical
+for JavaScript.</li>
+</ul>
+<p>This example 10 adds several features to our page:</p>
+<ul>
+<li>a link to an external stylesheet
+<strong>Mapbox_example10_styles.css</strong> that controls the
+appearance of the time-slider, the text around the time-slider and the
+popup (in Example 11).</li>
+<li>a div element <code>map-overlay</code> within which the <strong>map
+title</strong> and <strong>time-slider</strong> are placed.</li>
+<li>an array variable <code>years</code> that lists the data years used
+on the time-slider.</li>
+<li>function <code>setYear()</code> which is called when the user
+changes the time-slider. This function <code>setFilter()</code> on the
+<strong>denver_count_ped_bike</strong> layer, and redraws these layers
+according to the data year that the user has selected.</li>
+<li>a filter for the <strong>labels</strong> layer according to the data
+year that the user has selected.<br />
+</li>
+<li>an <code>event listener</code> for the time-slider feature that
+triggers the function <code>setYear</code> every time the time-slider is
+moved by the user.</li>
+</ul>
+<div id="example-10" class="section level3">
+<h3>Example 10</h3>
+<pre class="html"><code>
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 10- Timeslider&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- Importing style from a local file --&gt;
+&lt;link href = &#39;Mapbox_example10_styles.css&#39; rel = &#39;stylesheet&#39; /&gt;
+
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+
+&lt;div class=&#39;map-overlay&#39;&gt; 
+    &lt;div class=&#39;map-overlay-inner&#39;&gt;
+        &lt;h2&gt; Denver Pedestrian &amp; Bicycle Counts&lt;/h2&gt;
+        &lt;table&gt;
+            &lt;tr&gt; &lt;td&gt;
+                &lt;input id=&quot;year_slider&quot; type=&#39;range&#39; min=&#39;0&#39;, max=&#39;10&#39; step=&#39;1&#39; value=&#39;0&#39; list=&#39;tickmarks&#39; /&gt;
+                &lt;datalist id=&quot;tickmarks&quot;&gt;
+                    &lt;option value=&quot;0&quot; label=&quot;2013&quot;&gt;
+                    &lt;option value=&quot;1&quot; &gt;
+                    &lt;option value=&quot;2&quot; &gt;
+                    &lt;option value=&quot;3&quot; &gt;
+                    &lt;option value=&quot;4&quot; &gt;
+                    &lt;option value=&quot;5&quot; label=&quot;2018&quot;&gt;
+                    &lt;option value=&quot;6&quot; &gt;
+                    &lt;option value=&quot;7&quot; &gt;
+                    &lt;option value=&quot;8&quot; &gt;
+                    &lt;option value=&quot;9&quot; &gt;
+                    &lt;option value=&quot;10&quot; label=&quot;2023&quot;&gt;
+                &lt;/datalist&gt;
+            &lt;/td&gt; 
+
+            &lt;td&gt;
+                &lt;label id=&#39;year&#39;&gt; 2013&lt;/label&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;            
+        &lt;/table&gt;
+
+        &lt;p class=&quot;credit&quot;&gt; This map is created for &lt;a href=&quot;https://fuzhen-yin.github.io/uccs_cartography/index.html&quot;&gt; GES Cartography Lab &lt;/a&gt; by using the &lt;a href=&quot;https://data.drcog.org/dataset/bicycle-and-pedestrian-counts&quot;&gt; Pedestrian &amp; Bicycle Count Data&lt;/a&gt; and &lt;a href=&#39;https://opendata-geospatialdenver.hub.arcgis.com/datasets/f651766e877249108933f9f9f3196b69_244/explore?location=39.737255%2C-104.887634%2C9.99&#39;&gt;Existing Bike Facilities Data&lt;/a&gt;  &lt;/p&gt;
+        
+    &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;script&gt;
+
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;  //Put your mapbox access token here
+
+        // Load a new map in the &#39;map&#39; HTML div
+        var map = new mapboxgl.Map({
+            container: &#39;map&#39;, // container id
+            style: &#39;mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0&#39;, // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+        // Create an array of the available data years
+        var years = [
+            &#39;2013&#39;,
+            &#39;2014&#39;,
+            &#39;2015&#39;,
+            &#39;2016&#39;,
+            &#39;2017&#39;,
+            &#39;2018&#39;,
+            &#39;2019&#39;,
+            &#39;2020&#39;,
+            &#39;2021&#39;,
+            &#39;2022&#39;,
+            &#39;2023&#39;
+        ];               //Use this array to change the column item in our map
+
+        
+        map.on(&#39;load&#39;, function() {
+
+            // This is the main function that runs when the user changes the value of year
+            function setYear(year){
+
+                // Set the label to the correct year
+                document.getElementById(&#39;year&#39;).textContent = years[year];
+                var year_f = String(years[year]);
+
+                var data_year_filter = [&#39;==&#39;, &#39;year&#39;, year_f];
+
+                map.setFilter(&#39;denver_count_ped_bike&#39;, data_year_filter)
+                map.setFilter(&#39;denver_count_ped_bike_label&#39;, data_year_filter)
+
+                console.log(year_f)
+            }
+
+            // Add a CIRCLE layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;type&#39;:&#39;circle&#39;,
+                &#39;source&#39;:{
+                    type:&#39;vector&#39;,
+                    url:&#39;mapbox://fzing.5hoyhzja&#39; // Your Mapbox tileset Map ID
+                },
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;, // name of tilesets
+                &#39;layout&#39;:{
+                    &#39;visibility&#39;: &#39;visible&#39;
+                },
+                // filter: [&#39;==&#39;, &#39;year&#39;, year_v],
+                &#39;paint&#39;: {
+                    &#39;circle-color&#39;:&#39;#c7e9c0&#39;,
+                    &#39;circle-opacity&#39;:0.2,
+                    &#39;circle-stroke-width&#39;:{
+                        stops: [[8,0.5], [100,5], [500,10]]
+                    },
+                    &#39;circle-stroke-color&#39;:&#39;#000&#39;,          //points on the graph
+                    &#39;circle-stroke-opacity&#39;:0.5,
+                    &#39;circle-radius&#39;:{
+                        property:&#39;count_&#39;,
+                        stops:[
+                            [{zoom:9, value:0}, 10],
+                            [{zoom:9, value:4100}, 20],
+                            [{zoom:12, value:0}, 4],
+                            [{zoom:12, value:4100}, 100],
+                            [{zoom:16, value:0}, 6],
+                            [{zoom:16, value:4100}, 300],
+                        ]                                 //setting up proportional circle
+                    }
+                }
+            });
+
+            // Add a LABEL layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike_label&#39;,
+                &#39;type&#39;:&#39;symbol&#39;,
+                &#39;source&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;,  // name of tilesets
+                // filter: [&#39;==&#39;, &#39;year&#39;, year_v],
+                &#39;layout&#39;:{
+                    &#39;text-field&#39;:&#39;{count_}&#39;,
+                    &#39;text-size&#39;:{
+                        stops:[[0, 1],[100, 100],[500,400]]
+                    }
+                },
+                &#39;paint&#39;:{
+                    &#39;text-color&#39;:&#39;black&#39;
+                }
+            })
+
+            // Default filter to map the initial slide value = 0
+            var data_year_filter = [&#39;==&#39;, &#39;year&#39;, &#39;2013&#39;];
+            map.setFilter(&#39;denver_count_ped_bike&#39;, data_year_filter);
+            map.setFilter(&#39;denver_count_ped_bike_label&#39;, data_year_filter);
+
+            // Create an event listener to the slider so that the &quot;setYear()&quot; function runs when the user changes the slider 
+            document.getElementById(&#39;year_slider&#39;).addEventListener(&#39;input&#39;, function(e){
+                var year = parseInt(e.target.value);
+                setYear(year);
+            });
+
+        })
+
+
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+     </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab6_e10.png" style="width:100.0%"
+alt="Figure 6.X: Screenshots of Mapbox Example 10" />
+<div class="figcaption">Figure 6.X: Screenshots of Mapbox Example
+10</div>
+</div>
+<p><br></p>
+</div>
+<div id="example-11" class="section level3">
+<h3>Example 11</h3>
+<p>Here, we are adding more interactive features.</p>
+<blockquote>
+<p>When a user event occurs (click on something, mouse-over something) a
+function is triggered which changes the page.</p>
+</blockquote>
+<ul>
+<li>a variable that creates a new Mapbox popup object.</li>
+<li>a <code>mouseover</code> function that is triggered when the user
+puts their pointer over a Pedestrain Count Data Point. The popup then
+becomes visible.</li>
+<li>a <code>mouseenter</code> and a <code>mouseexit</code> function that
+changes the mouse pointer when hovering over a tube station, and removes
+the popup when moving the mouse off a tube station.</li>
+</ul>
+<pre class="html"><code>
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Mapbox Example 11- Mouse On PopUp&lt;/title&gt;
+
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
+&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- Importing style from a local file --&gt;
+&lt;link href = &#39;Mapbox_example10_styles.css&#39; rel = &#39;stylesheet&#39; /&gt;
+
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+
+&lt;div class=&#39;map-overlay&#39;&gt; 
+    &lt;div class=&#39;map-overlay-inner&#39;&gt;
+        &lt;h2&gt; Denver Pedestrian &amp; Bicycle Counts&lt;/h2&gt;
+        &lt;table&gt;
+            &lt;tr&gt; &lt;td&gt;
+                &lt;input id=&quot;year_slider&quot; type=&#39;range&#39; min=&#39;0&#39;, max=&#39;10&#39; step=&#39;1&#39; value=&#39;0&#39; list=&#39;tickmarks&#39; /&gt;
+                &lt;datalist id=&quot;tickmarks&quot;&gt;
+                    &lt;option value=&quot;0&quot; label=&quot;2013&quot;&gt;
+                    &lt;option value=&quot;1&quot; &gt;
+                    &lt;option value=&quot;2&quot; &gt;
+                    &lt;option value=&quot;3&quot; &gt;
+                    &lt;option value=&quot;4&quot; &gt;
+                    &lt;option value=&quot;5&quot; label=&quot;2018&quot;&gt;
+                    &lt;option value=&quot;6&quot; &gt;
+                    &lt;option value=&quot;7&quot; &gt;
+                    &lt;option value=&quot;8&quot; &gt;
+                    &lt;option value=&quot;9&quot; &gt;
+                    &lt;option value=&quot;10&quot; label=&quot;2023&quot;&gt;
+                &lt;/datalist&gt;
+            &lt;/td&gt; 
+
+            &lt;td&gt;
+                &lt;label id=&#39;year&#39;&gt; 2013&lt;/label&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;            
+        &lt;/table&gt;
+
+        &lt;p class=&quot;credit&quot;&gt; This map is created for &lt;a href=&quot;https://fuzhen-yin.github.io/uccs_cartography/index.html&quot;&gt; GES Cartography Lab &lt;/a&gt; by using the &lt;a href=&quot;https://data.drcog.org/dataset/bicycle-and-pedestrian-counts&quot;&gt; Pedestrian &amp; Bicycle Count Data&lt;/a&gt; and &lt;a href=&#39;https://opendata-geospatialdenver.hub.arcgis.com/datasets/f651766e877249108933f9f9f3196b69_244/explore?location=39.737255%2C-104.887634%2C9.99&#39;&gt;Existing Bike Facilities Data&lt;/a&gt;  &lt;/p&gt;
+        
+    &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;script&gt;
+
+    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;  //Put your mapbox access token here
+
+        // Load a new map in the &#39;map&#39; HTML div
+        var map = new mapboxgl.Map({
+            container: &#39;map&#39;, // container id
+            style: &#39;mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0&#39;, // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+        // Create an array of the available data years
+        var years = [
+            &#39;2013&#39;,
+            &#39;2014&#39;,
+            &#39;2015&#39;,
+            &#39;2016&#39;,
+            &#39;2017&#39;,
+            &#39;2018&#39;,
+            &#39;2019&#39;,
+            &#39;2020&#39;,
+            &#39;2021&#39;,
+            &#39;2022&#39;,
+            &#39;2023&#39;
+        ];               //Use this array to change the column item in our map
+
+        
+        map.on(&#39;load&#39;, function() {
+
+            // This is the main function that runs when the user changes the value of year
+            function setYear(year){
+
+                // Set the label to the correct year
+                document.getElementById(&#39;year&#39;).textContent = years[year];
+                var year_f = String(years[year]);
+
+                var data_year_filter = [&#39;==&#39;, &#39;year&#39;, year_f];
+
+                map.setFilter(&#39;denver_count_ped_bike&#39;, data_year_filter)
+                map.setFilter(&#39;denver_count_ped_bike_label&#39;, data_year_filter)
+
+                console.log(year_f)
+            }
+
+            // Add a CIRCLE layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;type&#39;:&#39;circle&#39;,
+                &#39;source&#39;:{
+                    type:&#39;vector&#39;,
+                    url:&#39;mapbox://fzing.5hoyhzja&#39; // Your Mapbox tileset Map ID
+                },
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;, // name of tilesets
+                &#39;layout&#39;:{
+                    &#39;visibility&#39;: &#39;visible&#39;
+                },
+                // filter: [&#39;==&#39;, &#39;year&#39;, year_v],
+                &#39;paint&#39;: {
+                    &#39;circle-color&#39;:&#39;#c7e9c0&#39;,
+                    &#39;circle-opacity&#39;:0.2,
+                    &#39;circle-stroke-width&#39;:{
+                        stops: [[8,0.5], [100,5], [500,10]]
+                    },
+                    &#39;circle-stroke-color&#39;:&#39;#000&#39;,          //points on the graph
+                    &#39;circle-stroke-opacity&#39;:0.5,
+                    &#39;circle-radius&#39;:{
+                        property:&#39;count_&#39;,
+                        stops:[
+                            [{zoom:9, value:0}, 10],
+                            [{zoom:9, value:4100}, 20],
+                            [{zoom:12, value:0}, 4],
+                            [{zoom:12, value:4100}, 100],
+                            [{zoom:16, value:0}, 6],
+                            [{zoom:16, value:4100}, 300],
+                        ]                                 //setting up proportional circle
+                    }
+                }
+            });
+
+            // Add a LABEL layer to the map 
+            map.addLayer({
+                &#39;id&#39;:&#39;denver_count_ped_bike_label&#39;,
+                &#39;type&#39;:&#39;symbol&#39;,
+                &#39;source&#39;:&#39;denver_count_ped_bike&#39;,
+                &#39;source-layer&#39;:&#39;denver_count_ped_bike-17yvzf&#39;,  // name of tilesets
+                // filter: [&#39;==&#39;, &#39;year&#39;, year_v],
+                &#39;layout&#39;:{
+                    &#39;text-field&#39;:&#39;{count_}&#39;,
+                    &#39;text-size&#39;:{
+                        stops:[[0, 1],[100, 100],[500,400]]
+                    }
+                },
+                &#39;paint&#39;:{
+                    &#39;text-color&#39;:&#39;black&#39;
+                }
+            })
+
+            // Default filter to map the initial slide value = 0
+            var data_year_filter = [&#39;==&#39;, &#39;year&#39;, &#39;2013&#39;];
+            map.setFilter(&#39;denver_count_ped_bike&#39;, data_year_filter);
+            map.setFilter(&#39;denver_count_ped_bike_label&#39;, data_year_filter);
+
+            // Create an event listener to the slider so that the &quot;setYear()&quot; function runs when the user changes the slider 
+            document.getElementById(&#39;year_slider&#39;).addEventListener(&#39;input&#39;, function(e){
+                var year = parseInt(e.target.value);
+                setYear(year);
+            });
+
+            // To display a popup 
+            var mypopup = new mapboxgl.Popup({offset:[150,50],closeButton: false})
+
+            // Another event listener that adds the popup when the user puts their cursor over the tube circles
+            map.on(&#39;mouseover&#39;, &#39;denver_count_ped_bike&#39;, function(e){
+                mypopup
+                    .setLngLat(e.features[0].geometry.coordinates)
+                    .setHTML(&quot;&lt;h3&gt;&quot;+ e.features[0].properties.type +&quot; Count &lt;/h3&gt; &quot; + e.features[0].properties.count_ + &quot; on &quot; + e.features[0].properties.month + &quot;/&quot; + e.features[0].properties.day + &quot;/&quot; + e.features[0].properties.year )
+                    .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the stations layer.
+            map.on(&#39;mouseenter&#39;, &#39;denver_count_ped_bike&#39;, function () {
+                  map.getCanvas().style.cursor = &#39;pointer&#39;;
+            });
+
+            // Change it back to a pointer when it leaves and remove the popup window.
+            map.on(&#39;mouseleave&#39;, &#39;denver_count_ped_bike&#39;, function () {
+                map.getCanvas().style.cursor = &#39;&#39;;
+                mypopup.remove();
+            });
+
+        })
+
+
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+     </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab6_e11.png" style="width:100.0%"
+alt="Figure 6.X: Screenshots of Mapbox Example 11" />
+<div class="figcaption">Figure 6.X: Screenshots of Mapbox Example
+11</div>
+</div>
+<p><br></p>
+</div>
+</div>
+<div id="further-materials-on-mapbox" class="section level2">
+<h2>Further Materials on Mapbox</h2>
+<p>We will look at further Mapbox examples after the spring break,
+including some 2.5D mapping and camera controls. Mapbox have created a
+powerful and flexible set of tools that can be used on lots of different
+types of spatial data, and offer users a variety of different
+interaction possibilities.</p>
+<blockquote>
+<ul>
+<li>A good overview of the entire Mapbox tool suite is found here: <a
+href="https://www.mapbox.com/help/how-mapbox-works/"
+class="uri">https://www.mapbox.com/help/how-mapbox-works/</a></li>
+<li>There are also some great Mapbox.gl JS examples online that you can
+look at: <a
+href="https://www.mapbox.com/mapbox-gl-js/example/simple-map/"
+class="uri">https://www.mapbox.com/mapbox-gl-js/example/simple-map/</a></li>
+<li>These examples include some nice feature like updating a layer
+dynamically by zoom level: <a
+href="https://www.mapbox.com/mapbox-gl-js/example/updating-choropleth/"
+class="uri">https://www.mapbox.com/mapbox-gl-js/example/updating-choropleth/</a></li>
+<li>A time-slider of event data: <a
+href="https://www.mapbox.com/mapbox-gl-js/example/timeline-animation/"
+class="uri">https://www.mapbox.com/mapbox-gl-js/example/timeline-animation/</a></li>
+<li>A slideshow of camera ’fly-to- events: <a
+href="https://www.mapbox.com/mapbox-gl-js/example/scroll-fly-to/"
+class="uri">https://www.mapbox.com/mapbox-gl-js/example/scroll-fly-to/</a></li>
+</ul>
+</blockquote>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
