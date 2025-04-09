@@ -1,0 +1,16 @@
+
+
+
+Change a layer's color with buttons
+	https://docs.mapbox.com/mapbox-gl-js/example/color-switcher/
+
+
+Interpolate 
+	https://docs.mapbox.com/style-spec/reference/expressions/#interpolate
+
+
+Layer types 
+	https://docs.mapbox.com/style-spec/reference/layers/#paint-property
+
+
+
