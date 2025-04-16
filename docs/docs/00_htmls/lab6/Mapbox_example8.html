@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>Mapbox Example 8- Proportional Circles</title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; };
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+
+<script>
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A';  //Put your mapbox access token here
+
+        // Load a new map in the 'map' HTML div
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/fzing/cm84u56b2004j01so8i2s6qd0', // Put your mapbox style ID here
+            center: [-104.942114, 39.717785], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+
+        
+        map.on('load', function() {
+
+
+            // Add a CIRCLE layer to the map 
+            map.addLayer({
+                'id':'denver_count_ped_bike',
+                'type':'circle',
+                'source':{
+                    type:'vector',
+                    url:'mapbox://fzing.5hoyhzja' // Your Mapbox tileset Map ID
+                },
+                'source-layer':'denver_count_ped_bike-17yvzf', // name of tilesets
+                'layout':{
+                    'visibility': 'visible'
+                },
+                'paint': {
+                    'circle-color':'#fffef7',
+                    'circle-opacity':0.2,
+                    'circle-stroke-width':{
+                        stops: [[8,0.5], [100,5], [500,10]]
+                    },
+                    'circle-stroke-color':'#000',          //points on the graph
+                    'circle-stroke-opacity':0.5,
+                    'circle-radius':{
+                        property:'count_',
+                        stops:[
+                            [{zoom:9, value:0}, 3],
+                            [{zoom:9, value:4100}, 10],
+                            [{zoom:12, value:0}, 4],
+                            [{zoom:12, value:4100}, 80],
+                            [{zoom:16, value:0}, 6],
+                            [{zoom:16, value:4100}, 150],
+                        ]                                 //setting up proportional circle
+                    }
+                }
+            });
+            
+
+        })
+
+
+
+
+
+</script>
+
+</body>
+</html>

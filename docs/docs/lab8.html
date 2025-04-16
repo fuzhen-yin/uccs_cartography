@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 8: Interactive Charts</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="website.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cartography Labs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="lab4.html">Lab 4</a>
+</li>
+<li>
+  <a href="lab5.html">Lab 5</a>
+</li>
+<li>
+  <a href="lab6.html">Lab 6</a>
+</li>
+<li>
+  <a href="lab7.html">Lab 7</a>
+</li>
+<li>
+  <a href="lab8.html">Lab 8</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 8: Interactive Charts</h1>
+
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This lab introduces ways of creating online charts for data
+visualizations. Similar to previous labs, the examples are built upon
+each other with new features have been added in gradually. When
+replicate these examples, please compare carefully the
+<strong>differences between them</strong>:</p>
+<ul>
+<li><em>What are the new scripts/functions have been added?</em></li>
+<li><em>How they change the outcomes?</em></li>
+</ul>
+<p>The zip file with Lab 8 materials can be found here: <a
+href="https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab8.zip"
+class="uri">https://github.com/fuzhen-yin/uccs_cartography/blob/main/lab_materials/lab8.zip</a></p>
+<p>(Don’t know how to download the data? Please read: <a
+href="https://fuzhen-yin.github.io/uccs_cartography/lab4.html">Lab 4 -
+Overview</a>)</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>As with the online mapping examples in the previous labs, the data
+for online charts is generally loaded from an external source.
+Separating the data from the design is good practice, and improves the
+reusability of your code.</p>
+<p>Data for online charts can be in the form of a <strong>CSV</strong>
+file or <strong>JSON</strong> (JavaScript Object Notation) file for
+archived data; or can involve requests to an API or web server for live
+data.</p>
+<p>For this lab we are going to use data from <strong>CSV files
+(CityData_WUP2018.csv)</strong> by calling them via <strong>GitHub Raw
+URLs</strong>. This CityData is of the largest urban agglomerations in
+the world according to the United Nations World Urbanization Prospects
+2018. There are three versions of this CSV included- all 2000 cities,
+the top 200 and the top 20. It corresponds to the <strong>three csv
+files</strong> in the lab’s folder:</p>
+<ul>
+<li>CityData_WUP2018_all.csv</li>
+<li>CityData_WUP2018_top20.csv</li>
+<li>CityData_WUP2018_top200.csv</li>
+</ul>
+<p>To load CSV files using JavaScript, we need to upload them to GitHub
+and obtain its <strong>raw url</strong> for data sharing.</p>
+</div>
+<div id="github-raw-urls" class="section level3">
+<h3>GitHub Raw URLs</h3>
+<p>First, let’s upload all the three .csv files to the GitHub
+repository. Navigate to the repository that you have created for this
+course.</p>
+<p><img src="figs/lab8_github_1.png" style="width:100.0%"
+alt="Figure 8.1: Open the course repository" /> <br> Next, upload
+files.</p>
+<p><img src="figs/lab8_github_2.png" style="width:100.0%"
+alt="Figure 8.2: Upload files" /> <br> Drag the three .csv files to add
+them to your repository and commit changes.</p>
+<div class="float">
+<img src="figs/lab8_github_3.png" style="width:100.0%"
+alt="Figure 8.3: Upload files" />
+<div class="figcaption">Figure 8.3: Upload files</div>
+</div>
+<p><br> In the home of your repository, there are three .csv files just
+uploaded. Click on a file to have a look at the data.</p>
+<div class="float">
+<img src="figs/lab8_github_4.png" style="width:100.0%"
+alt="Figure 8.4: Upload files" />
+<div class="figcaption">Figure 8.4: Upload files</div>
+</div>
+<p><br> Click on “Raw” to get the raw url. <img
+src="figs/lab8_github_5.png" style="width:100.0%"
+alt="Figure 8.5: Upload files" /></p>
+<p><br></p>
+<p>The url highlighted is the link that can be used to load the data in
+your html file. You can also use this link to share the data with
+others.<br />
+<img src="figs/lab8_github_6.png" style="width:100.0%"
+alt="Figure 8.6: Upload files" /></p>
+</div>
+</div>
+<div id="before-starts" class="section level2">
+<h2>Before Starts</h2>
+<p>This lab presents 8 examples of making charts. The first five using
+the D3 library, and the last three incorporates D3 with Dimple. The
+submission for this lab is pretty straightforward.</p>
+<div class="bluebox">
+<div class="left">
+<p><strong>Submission</strong></p>
+</div>
+<p>Similar to the lab 7, you still need to <strong>publish the required
+webpages on GitHub, obtain the publicly accessible urls and submit the
+urls using the ‘text entry’ on Canvas</strong>. Remember the process of
+publishing the midterm project on GitHub? It’s the same process!
+However, the GitHub page tutorial could be find <a
+href="https://fuzhen-yin.github.io/uccs_cartography/index.html#Publish_Your_Map_GitHub">here</a>.<br />
+After playing with all 8 examples, please select ONE of your favorite
+chart and redesign it a little bit. Don’t forget to replace the github
+raw data url with your own data url as I will be removing the dataset
+from my github shortly.</p>
+<p>Submit the publicly accessible link to your redesigned chart, and
+briefly explain (100 words) whey you like this chart.</p>
+</div>
+</div>
+<div id="an-introduction-to-d3" class="section level2">
+<h2>An introduction to D3</h2>
+<p><strong><a href="https://d3js.org/">D3 (Data Driven
+Documents)</a></strong> is a popular library for web visualization
+created by the Programmer and Data Journalist Mike Bostock. It is based
+on the <strong>open web standards HTML, SVG and CSS</strong>, and offers
+powerful capabilities for binding data to web objects using the
+<strong>Document Object Model (DOM)</strong>. There are a large number
+of both basic and advanced examples of different charts and
+visualizations created using D3 which can be viewed online- <a
+href="https://observablehq.com/@d3/gallery"
+class="uri">https://observablehq.com/@d3/gallery</a></p>
+<p><img src="figs/lab8_d3_example.png" style="width:100.0%"
+alt="Figure 8.7: D3 Example Gallery" /> <br></p>
+<p>More recently, D3 has also developed an editable notebooks version
+for easy sharing of templates called <strong>Observable</strong>. D3 is
+a powerful tool, though has quite a substantial learning curve. We will
+only cover the basics in this lab. If you want to develop your skills
+further, some useful tutorials can be found in the following
+locations:</p>
+<ul>
+<li>D3 API Reference: <a href="https://d3js.org/api"
+class="uri">https://d3js.org/api</a></li>
+<li>D3 GitHub page: <a
+href="https://github.com/d3/d3?tab=readme-ov-file"
+class="uri">https://github.com/d3/d3?tab=readme-ov-file</a></li>
+<li>D3 Chart templates from the Financial Times: <a
+href="https://github.com/ft-interactive/visual-vocabulary?tab=readme-ov-file"
+class="uri">https://github.com/ft-interactive/visual-vocabulary?tab=readme-ov-file</a></li>
+</ul>
+</div>
+<div id="some-basic-svg-shapes" class="section level2">
+<h2>Some Basic SVG Shapes</h2>
+<div id="d3---example-1" class="section level3">
+<h3>D3 - Example 1</h3>
+<p>The underlying standard for rendering graphics in D3 is
+<strong>SVG</strong>.</p>
+<blockquote>
+<p>SVG uses the Document Object Model (DOM) just like HTML, and has a
+similar structure of tag elements.</p>
+</blockquote>
+<p>Basic shape elements include <code>&lt;rect&gt;</code> for rectangles
+and <code>&lt;circle&gt;</code> for circles. The example below creates
+some basic rectangles that will underlie a bar chart. Note the
+coordinates are defined from the <strong>top-left corner</strong> of the
+SVG element.</p>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;title&gt;D3 Example 1- Core SVG Elements&lt;/title&gt;
+    &lt;!-- You will load the D3 library here. --&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;!-- Page elements and content go here. --&gt;
+    &lt;svg width=&quot;320&quot; height=&quot;360&quot;&gt;
+        &lt;rect x=&quot;30&quot; width=&quot;40&quot; height=&quot;80&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;75&quot; width=&quot;40&quot; height=&quot;40&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;120&quot; width=&quot;40&quot; height=&quot;140&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;165&quot; width=&quot;40&quot; height=&quot;80&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+    &lt;/svg&gt;
+    
+
+    &lt;script&gt;
+    // Our D3 code will go here. 
+    &lt;/script&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
+  </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab8_chart_1.png" style="width:100.0%"
+alt="Figure 8.8: Screenshots of D3-1" />
+<div class="figcaption">Figure 8.8: Screenshots of D3-1</div>
+</div>
+<p><br></p>
+</div>
+</div>
+<div id="manipulating-svg-elements-using-d3" class="section level2">
+<h2>Manipulating SVG Elements Using D3</h2>
+<div id="d3---example-2" class="section level3">
+<h3>D3 - Example 2</h3>
+<p>The first example hardcodes the SVG elements.</p>
+<blockquote>
+<p>Hard coding is the software development practice of embedding data
+directly into the source code of a program or other executable object,
+as opposed to obtaining the data from external sources or generating it
+at runtime</p>
+</blockquote>
+<p>In this next example, the height of the rectangles is defined in the
+D3 code.</p>
+<ul>
+<li>We create an array called <code>popData</code> with the values for
+our bar chart.</li>
+<li>The D3 script begins with a <code>d3.selectAll(“rect”)</code>
+method. This selects all the rectangle elements and iterates through
+each element.</li>
+<li>The <code>data()</code> method is central to how d3 works, and here
+the <code>.data(popData)</code> line binds the data array to the
+<code>rect</code> elements.</li>
+<li>Next the <code>.attr( "height", function(d){ return d;});</code>
+line changes the height value to the corresponding value in the popData
+array.</li>
+</ul>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;title&gt;D3 Example 2- Apply height of rectangles from array data&lt;/title&gt;
+    
+    &lt;!-- Load the D3 library here --&gt;
+    &lt;script src=&quot;https://d3js.org/d3.v4.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+
+&lt;body&gt;
+    &lt;!-- Page elements and content go here. --&gt;
+    &lt;svg width=&quot;320&quot; height=&quot;360&quot;&gt;
+        &lt;rect x=&quot;30&quot; width=&quot;40&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;75&quot; width=&quot;40&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;120&quot; width=&quot;40&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;165&quot; width=&quot;40&quot; fill=&quot;steelblue&quot;&gt;&lt;/rect&gt;
+    &lt;/svg&gt;
+
+    &lt;script&gt;
+        //  D3 code starts 
+
+        var popData = [ 40, 80, 120, 100 ]; // Array with graph data
+
+        d3.selectAll( &quot;rect&quot; ) // select all rectangle elements
+            .data( popData )
+            .attr( &quot;height&quot;, function(d){ // assign the data to the attribute height
+                return d;
+            });
+        
+    &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+              </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<p><img src="figs/lab8_chart_2.png" style="width:100.0%"
+alt="Figure 8.9: Screenshots of D3-2" /> <br></p>
+</div>
+<div id="d3---example-3" class="section level3">
+<h3>D3 - Example 3</h3>
+<p>It is more common to create the entire SVG html code in D3 and have
+no SVG elements hardcoded.</p>
+<p>This can be seen in example 3. In this example we select the body
+element and append the SVG element in the D3 code. The next stage is a
+bit counter-intuitive, as we still select all the rectangle elements (if
+these do not exist, then D3 creates them) even though the rectangle
+elements have not been created in the HTML.</p>
+<p>Example 3 also includes code to set the coordinates of the bars as a
+function based on the number of elements in the array, and to align the
+bars at the bottom of the chart, rather than at the top</p>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;D3 Example 3- Basic Bar Chart&lt;/title&gt;
+    
+    &lt;!-- Load the D3 library here --&gt;
+    &lt;script src=&quot;https://d3js.org/d3.v4.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+&lt;script&gt;
+    // Our D3 code will go here.
+    var popData = [ 40, 80, 120, 100 ]; // Data used for the bar chart
+
+    // Width and height of SVG
+    var w = 300;
+    var h = 350;
+
+    //Create SVG element
+    var svg = d3.select(&quot;body&quot;)
+        .append(&quot;svg&quot;)
+        .attr(&quot;width&quot;, w)
+        .attr(&quot;height&quot;, h);
+
+    // Select and generate rectangle elements
+    svg.selectAll( &quot;rect&quot; )
+        .data( popData )
+        .enter()
+        .append(&quot;rect&quot;)
+        .attr( &quot;x&quot;, function(d,i){
+            return i*50 + 30; // Set x coordinate of rectangle to index of data value (i)*25.
+            // Add 30 to account for our left margin.
+        })
+        .attr( &quot;y&quot;, function(d){
+            return h - d; // Set y coordinate for each bar to height minus the data value
+        })
+        .attr( &quot;width&quot;, 40 )
+        .attr( &quot;height&quot;, function(d){
+            return d; // Set height of rectangle to data value
+        })
+        .attr( &quot;fill&quot;, &quot;steelblue&quot;);
+&lt;/script&gt;
+
+    
+    
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<p><img src="figs/lab8_chart_3.png" style="width:100.0%"
+alt="Figure 8.10: Screenshots of D3-3" /> <br></p>
+</div>
+</div>
+<div id="creating-a-barchart-from-the-csv-file" class="section level2">
+<h2>Creating a Barchart from the CSV File</h2>
+<div id="d3---example-4" class="section level3">
+<h3>D3 - Example 4</h3>
+<p>In this example, we fill the popData array using the data from a
+<strong>CSV file</strong> by calling its raw data url (see the previous
+Section on how to obtain GitHub raw data url).</p>
+<p>This <code>d3.csv()</code> method returns the CSV data as a JSON
+array. We also define the position of the bars based on the length of
+the data array. Finally, we add a basic x and y axis, and y axis
+title.</p>
+<pre class="html"><code>
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;D3 Example 4- Bar Chart Data from CSV&lt;/title&gt;
+    &lt;script src=&quot;http://d3js.org/d3.v4.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;
+        text {
+            font-family: &quot;Open Sans&quot;, sans-serif;
+            font-size: 12px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;!-- Location for page elements. --&gt;
+&lt;script&gt;
+    // Our D3 code will go here.
+    var popData = [];
+
+    // Paste here the github raw url of &quot;CityData_WUP2018_top20.csv&quot; data  
+    d3.csv(&quot;https://raw.githubusercontent.com/fuzhen-yin/2025_carto_test/refs/heads/main/CityData_WUP2018_top20.csv&quot;, function(d) {
+        return {
+            CityName : d.CityName,
+            pop2020 : +d.pop2020  // the + sign forces the values to be a number
+        };
+    }, 
+
+    function(error, rows) {
+        popData = rows;
+        console.log(popData);
+        createVisualization();
+    });
+
+    function createVisualization(){
+        // Width and height of SVG
+        var w = 300;
+        var h = 350;
+
+        // Get length of Array and set length so we can an input dataset of variable length
+        var arrayLength = popData.length; // length of dataset or the number of rows
+        var maxValue = d3.max(popData, function(d) { return +d.pop2020;} ); // get maximum value of our dataset
+        var x_axisLength = 200; // length of x-axis in our layout
+        var y_axisLength = 200; // length of y-axis in our layout
+
+
+        // Use a scale for the height of the visualization
+        var yScale = d3.scaleLinear()
+            .domain([0, maxValue])
+            .range([0, y_axisLength]);
+
+        //Create SVG element
+        var svg = d3.select(&quot;body&quot;)
+            .append(&quot;svg&quot;)
+            .attr(&quot;width&quot;, w)
+            .attr(&quot;height&quot;, h);
+
+        // Select and generate rectangle elements
+        svg.selectAll( &quot;rect&quot; )
+            .data( popData )
+            .enter()
+            .append(&quot;rect&quot;)
+            .attr( &quot;x&quot;, function(d,i){
+                return i * (x_axisLength/arrayLength) + 30; // Set x coordinate of rectangle to index of data value (i) *25
+            })
+            .attr( &quot;y&quot;, function(d){
+                return h - yScale(d.pop2020) - 75; // Set y coordinate of rect using the y scale
+            })
+            .attr( &quot;width&quot;, (x_axisLength/arrayLength) - 1) 
+            .attr( &quot;height&quot;, function(d){
+                return yScale(d.pop2020); // Set height of using the scale
+            })
+            .attr( &quot;fill&quot;, &quot;steelblue&quot;);
+
+        // Create y-axis
+        svg.append(&quot;line&quot;)
+            .attr(&quot;x1&quot;, 30)
+            .attr(&quot;y1&quot;, 40)
+            .attr(&quot;x2&quot;, 30)
+            .attr(&quot;y2&quot;, 275)
+            .attr(&quot;stroke-width&quot;, 2)
+            .attr(&quot;stroke&quot;, &quot;black&quot;);
+
+        // Create x-axis
+        svg.append(&quot;line&quot;)
+            .attr(&quot;x1&quot;, 30)
+            .attr(&quot;y1&quot;, 275)
+            .attr(&quot;x2&quot;, 250)
+            .attr(&quot;y2&quot;, 275)
+            .attr(&quot;stroke-width&quot;, 2)
+            .attr(&quot;stroke&quot;, &quot;black&quot;);
+
+        // y-axis label
+        svg.append(&quot;text&quot;)
+            .attr(&quot;class&quot;, &quot;y label&quot;)
+            .attr(&quot;text-anchor&quot;, &quot;end&quot;)
+            .text(&quot;City Population&quot;)
+            .attr(&quot;transform&quot;, &quot;translate(20, 40) rotate(-90)&quot;)
+            .attr(&quot;font-size&quot;, &quot;14&quot;)
+            .attr(&quot;font-family&quot;, &quot;&#39;Open Sans&#39;, sans-serif&quot;);
+    };
+
+
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+      </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<p><img src="figs/lab8_chart_4.png" style="width:100.0%"
+alt="Figure 8.11: Screenshots of D3-4" /> <br></p>
+<p>This example shows that <strong>D3</strong> can be rather time
+consuming to achieve basic charts.</p>
+<p>When you are only creating basic line charts and bar charts then it
+is probably easier to <strong>use chart libraries</strong> such as
+<strong>Dimple.js</strong> and <strong>Plot.ly</strong> that speed up
+the process and reduce the length of code required.</p>
+<blockquote>
+<p>D3 is more advantageous when you are looking to develop more
+sophisticated charts.</p>
+</blockquote>
+<p>An example has been included of <strong>a bubble chart</strong> using
+the <strong>force packing algorithm</strong> built into D3 in example
+5.</p>
+</div>
+<div id="d3---example-5" class="section level3">
+<h3>D3 - Example 5</h3>
+<p>This example is based on the template provided here: <a
+href="https://www.d3-graph-gallery.com/circularpacking.html"
+class="uri">https://www.d3-graph-gallery.com/circularpacking.html</a></p>
+<p>The template has been changed to use the city population data used in
+this lab. There are a number of ways this example could be improved on,
+such as clustering groups of cities by countries, and adjusting how the
+population variable corresponds to the circle size (at the moment it
+directly relates to radius, which is arguably misleading for the viewer,
+as it exaggerates differences between cities).</p>
+<pre class="html"><code>
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      .node circle {
+        stroke: #3a403d;
+        stroke-width: .5px;
+      }
+
+        .node circle:hover{
+          stroke-width: 3px !important;
+          opacity: 1 !important;
+        }
+
+        #header {
+            margin: auto;
+            width: 50%;
+        }
+        
+         h1 {
+            margin: auto;
+            padding: 10px 0 0 0;
+            font: bold 25px Verdana;
+        }
+        
+        h2 {
+            margin: 5px 15px 10px 20px;
+            padding: 0;
+            font: bold 16px Verdana;
+        }
+        
+        p {
+            margin: 0 15px 15px 20px;
+            padding: 0;
+        }
+
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+      
+&lt;div id=&quot;header&quot;&gt;
+    &lt;h1&gt;D3 Bubble Chart with Force Packing- Top 200 Population Cities in 2020&lt;/h1&gt;
+    &lt;p&gt;Based on template example by &lt;a href=&quot;https://www.d3-graph-gallery.com/circularpacking.html&quot;&gt;D3 Graph Gallery&lt;/a&gt;.&lt;/p&gt;     
+&lt;/div&gt;
+      
+&lt;div id=&quot;my_dataviz&quot;&gt;&lt;/div&gt;
+      
+    &lt;script src=&quot;https://d3js.org/d3.v4.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+    var width = window.innerWidth, height = window.innerHeight, sizeDivisor = 100, nodePadding = 2.5;
+
+    var svg = d3.select(&quot;#my_dataviz&quot;)
+        .append(&quot;svg&quot;)
+        .attr(&quot;width&quot;, width)
+        .attr(&quot;height&quot;, height);
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var simulation = d3.forceSimulation()
+        .force(&quot;forceX&quot;, d3.forceX().strength(.1).x(width * .5))
+        .force(&quot;forceY&quot;, d3.forceY().strength(.1).y(height * .5))
+        .force(&quot;center&quot;, d3.forceCenter().x(width * .5).y(height * .5))
+        .force(&quot;charge&quot;, d3.forceManyBody().strength(-15));
+
+    // Paste here the github raw url of &quot;CityData_WUP2018_top200.csv&quot; data  
+    d3.csv(&quot;https://raw.githubusercontent.com/fuzhen-yin/2025_carto_test/refs/heads/main/CityData_WUP2018_top200.csv&quot;, types, function(error,graph){
+      if (error) throw error;
+
+      // sort the nodes so that the bigger ones are at the back
+      graph = graph.sort(function(a,b){ return b.size - a.size; });
+
+       // create a tooltip
+      var Tooltip = d3.select(&quot;#my_dataviz&quot;)
+        .append(&quot;div&quot;)
+        .style(&quot;opacity&quot;, 0)
+        .attr(&quot;class&quot;, &quot;tooltip&quot;)
+        .style(&quot;background-color&quot;, &quot;white&quot;)
+        .style(&quot;border&quot;, &quot;solid&quot;)
+        .style(&quot;border-width&quot;, &quot;2px&quot;)
+        .style(&quot;border-radius&quot;, &quot;5px&quot;)
+        .style(&quot;padding&quot;, &quot;5px&quot;)
+        .style(&quot;position&quot;, &quot;absolute&quot;)
+      
+
+      // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        //console.log(&quot;Mouseover&quot;)  
+        Tooltip
+          .style(&quot;opacity&quot;, 1)
+      }
+      var mousemove = function(d) {
+        //console.log(&quot;Mousemove&quot;)
+        Tooltip
+          .html(&quot;&lt;h2&gt;&quot; + d.CityName + &quot;, &quot; + d.Country + &quot;&lt;/h2&gt;&quot; + &quot;&lt;p&gt;&quot; + d3.format(&quot;.1f&quot;)(d.pop2020) + &quot;m population&quot; + &quot;&lt;/p&gt;&quot;)
+          .style(&quot;left&quot;, (d3.mouse(this)[0]+40) + &quot;px&quot;)
+          .style(&quot;top&quot;, (d3.mouse(this)[1]+40) + &quot;px&quot;)
+      }
+      var mouseleave = function(d) {
+        Tooltip
+          .style(&quot;opacity&quot;, 0)
+      }       
+        
+        
+      //update the simulation based on the data
+      simulation
+          .nodes(graph)
+          .force(&quot;collide&quot;, d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
+          .on(&quot;tick&quot;, function(d){
+            node
+                .attr(&quot;cx&quot;, function(d){ return d.x; })
+                .attr(&quot;cy&quot;, function(d){ return d.y; })
+          });
+
+      var node = svg.append(&quot;g&quot;)
+          .attr(&quot;class&quot;, &quot;node&quot;)
+        .selectAll(&quot;circle&quot;)
+        .data(graph)
+        .enter().append(&quot;circle&quot;)
+          .attr(&quot;r&quot;, function(d) { return d.radius; })
+          .attr(&quot;fill&quot;, function(d) { return color(d.Country); })
+          .attr(&quot;cx&quot;, function(d){ return d.x; })
+          .attr(&quot;cy&quot;, function(d){ return d.y; })
+          .on(&quot;mouseover&quot;, mouseover) // What to do when hovered
+          .on(&quot;mousemove&quot;, mousemove)
+          .on(&quot;mouseleave&quot;, mouseleave)
+          .call(d3.drag()
+              .on(&quot;start&quot;, dragstarted)
+              .on(&quot;drag&quot;, dragged)
+              .on(&quot;end&quot;, dragended));
+
+    });
+    
+
+    function dragstarted(d) {
+      if (!d3.event.active) simulation.alphaTarget(.03).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(d) {
+      d.fx = d3.event.x;
+      d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+      if (!d3.event.active) simulation.alphaTarget(.03);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    function types(d){
+      d.pop2020 = +d.pop2020;
+      d.size = +d.pop2020*2;
+      //d.radius = Math.sqrt(d.size/3.14); //Use this to size circles in proportion to area
+      d.radius = d.size;
+      return d;
+    }
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+      </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab8_chart_5.png" style="width:100.0%"
+alt="Figure 8.12: Screenshots of D3-5" />
+<div class="figcaption">Figure 8.12: Screenshots of D3-5</div>
+</div>
+<p><br></p>
+</div>
+</div>
+<div id="creating-a-bar-chart-in-dimple.js" class="section level2">
+<h2>Creating a Bar Chart in Dimple.js</h2>
+<p><strong>Dimple.js(<a href="http://dimplejs.org/examples_index.html"
+class="uri">http://dimplejs.org/examples_index.html</a>)</strong> is a
+JavaScript charting library built on D3. It offers a series of standard
+chart types with relatively minimal coding required.</p>
+<div class="float">
+<img src="figs/lab8_dimple_eg.png" style="width:100.0%"
+alt="Figure 8.12: Screenshots of D3-5" />
+<div class="figcaption">Figure 8.12: Screenshots of D3-5</div>
+</div>
+<p><br></p>
+<div id="dimple---barchart-1" class="section level3">
+<h3>Dimple - Barchart 1</h3>
+<p>Our first example is a Dimple bar chart. This example uses the
+<strong>CityData_WUP2018_top20.csv</strong> to plot the population in
+the top 20 largest urban agglomerations according to the UN.</p>
+<p>We need to add the <strong>Dimple.js library</strong> and the
+<strong>D3.js library</strong> in the <strong>header</strong> in this
+example. The CSV data is loaded using the <code>d3.csv</code> method by
+calling the <strong>github raw data url</strong>.</p>
+<p>D3 offers <a
+href="https://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js">a
+series of methods</a> for loading standard data types such as
+<strong>CSV</strong> and <strong>JSON</strong> files over HTTP.</p>
+<p>This is another example of an Asynchronous JavaScript (AJAX) approach
+where the function to draw the chart is run after the CSV file has been
+loaded (you cannot draw the chart before the data is loaded). The CSV
+data is loaded as the variable <code>CityData</code>, which is an
+<strong>array of JSON objects</strong>.</p>
+<blockquote>
+<p>JSON (JavaScript Object Notation) is a standard way of storing data
+in JavaScript based on name and value pairs- {“name”: “value”}.</p>
+</blockquote>
+<p>Dimple, like D3, is based on a web standard for vector graphics
+called <strong>SVG (Scalable Vector Graphics)</strong>. An SVG variable
+is created, with the width and height for the chart. Then the
+<code>myChart</code> variable is created using the svg variable and the
+<code>CityData</code> variable as arguments. We then create the
+<code>x</code> and <code>y</code> axes, using the column names from the
+CSV file.</p>
+<p>The <code>addseries</code> statement is used to define the chart
+type: <code>dimple.plot.bar</code>. Finally, the chart is plotted using
+<code>myChart.draw(500);</code>.</p>
+<p>The argument here is a delay in milliseconds used for an animation
+effect. This can be used for transitions between different data series
+in more advanced examples.</p>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;World City Populations Chart 2020&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot; /&gt;
+
+&lt;!--Load the chart libraries. Dimple is built on D3, and you need to also add D3--&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://d3js.org/d3.v4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js&quot;&gt;&lt;/script&gt;
+    
+&lt;style&gt;
+        
+    #chartContainer {width: 840px; margin: auto; margin-top: 50px; }
+    #chartContainer p {margin-left: 60px; margin-bottom: 5px; margin-top: 0; padding: 0;}
+    #charttitle {font: bold 22px  Verdana, sans-serif;}
+        
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;!--This is the div container for the chart--&gt;
+
+&lt;div id=&quot;chartContainer&quot;&gt;
+    &lt;p id=&quot;charttitle&quot;&gt;World&#39;s Largest Urban Agglomerations 2020&lt;/p&gt;
+    &lt;p id=&quot;chartsubhead&quot;&gt;Population data UN World Urbanization Prospects.&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;script&gt;
+
+//The following statement loads the data from the CSV file, and then runs the function after the CSV is loaded. CityData is returned as an array containing the CSV data
+
+    // Paste here the github raw url of &quot;CityData_WUP2018_top20.csv&quot; data  
+      d3.csv(&quot;https://raw.githubusercontent.com/fuzhen-yin/2025_carto_test/refs/heads/main/CityData_WUP2018_top20.csv&quot;, function(CityData) {
+            
+            console.log(CityData[1]);
+          
+            var svg = dimple.newSvg(&quot;#chartContainer&quot;, 840, 440); // The chart is an svg variable assigned to the chartcontainer div. It&#39;s width and height are also assigned here
+
+            var myChart = new dimple.chart(svg, CityData);  // Create the chart with CityData as the data input
+            myChart.setBounds(60, 15, 700, 300);            // Set the chart bounds within the svg container, top-left and bottom-right coords measured from top left
+
+            myChart.defaultColors = [
+                new dimple.color(&quot;#54aae3&quot;)
+            ];
+
+            var x = myChart.addCategoryAxis(&quot;x&quot;, &quot;CityName&quot;);  // Define the x axis. In this example it is a category axis
+
+            var y = myChart.addMeasureAxis(&quot;y&quot;, &quot;pop2020&quot;); // Define the y axis
+            y.title = &quot;Population 2020 (millions)&quot;;
+
+            var s = myChart.addSeries(null, dimple.plot.bar); // Plot a bar chart of the data
+
+            myChart.draw(500); // Draw the chart. The number is the animation delay in miliseconds
+
+            svg.selectAll(&quot;path.domain&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;); // These statements change the chart gridlines to a lighter grey colour
+            svg.selectAll(&quot;g.tick line&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;);
+
+      });
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+  </code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<p><img src="figs/lab8_chart_6.png" style="width:100.0%"
+alt="Figure 8.13: Screenshots of Dimple-1" /> <br></p>
+<p><br></p>
+</div>
+<div id="dimple---barchart-2" class="section level3">
+<h3>Dimple - Barchart 2</h3>
+<p>The second Dimple example shows a line chart example using the same
+library. This time the line chart shows the change in population for a
+single city.</p>
+<p>Dimple requires time series data to be formatted as a separate row
+for each time point. So in this example, we create a new
+<code>chartdata</code> JavaScript Object Notation (JSON) array that is
+populated using the original <code>CityData</code> array. Each row is a
+different decade in the time-series.</p>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;World City Populations Chart 1950-2035&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot; /&gt;
+
+&lt;!--Load the chart libraries. Dimple is built on D3, and you need to also add D3--&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://d3js.org/d3.v4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;    
+    #chartContainer {width: 840px; margin: auto; margin-top: 50px; }
+    #chartContainer p {margin-left: 60px; margin-bottom: 5px; margin-top: 0; padding: 0;}
+    #charttitle {font: bold 22px  Verdana, sans-serif;}
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+    
+&lt;body&gt;
+
+&lt;!--This is the div container for the chart--&gt;
+
+&lt;div id=&quot;chartContainer&quot;&gt;
+      
+    &lt;p id=&quot;charttitle&quot;&gt;Chart title is here&lt;/p&gt;
+    &lt;p id=&quot;chartsubhead&quot;&gt;Population 1950-2035. Data UN World Urbanization Prospects.&lt;/p&gt;
+
+&lt;/div&gt;
+
+
+&lt;script&gt;
+
+
+//This statement loads the data from the CSV file hosted on GitHub, and then runs the function after the CSV is loaded. CityData is an array that contains the CSV data
+
+        // Paste here the github raw url of &quot;CityData_WUP2018_top200.csv&quot; data  
+      d3.csv(&quot;https://raw.githubusercontent.com/fuzhen-yin/2025_carto_test/refs/heads/main/CityData_WUP2018_top200.csv&quot;, function(CityData) {
+        
+
+        var CityDataIndex = 0;    // Here we select which row of the csv data is going to be loaded. Change the number to change which city is shown in the chart
+        console.log(CityData[0]); // Show the data of the row in the console
+
+        document.getElementById(&quot;charttitle&quot;).innerHTML = CityData[CityDataIndex].CityName + &quot;,&amp;nbsp;&quot; + CityData[CityDataIndex].Country; // The name of the city and country is inserted into the chart title
+
+          
+        var svg = dimple.newSvg(&quot;#chartContainer&quot;, 840, 440); // The chart is an svg variable assigned to the chartcontainer div. It&#39;s width and height are also assigned here
+
+        // Dimple requires each data point on a time series to be a separate row. Below we insert the population data from the CityData array into a new array of JSON objects in the required format
+        var chartdata = [
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1950&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop1950*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1960&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop1960*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1970&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop1970*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1980&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop1980*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1990&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop1990*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2000&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2000*1000000) },
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2010&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2010*1000000)},
+          { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2015&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2015*1000000) },
+          { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2015&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2015*1000000) },
+          { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2020&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2020*1000000) },
+          { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2030&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2030*1000000) },
+          { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2035&quot;,&quot;Population&quot;:(CityData[CityDataIndex].pop2035*1000000) }
+        ];
+
+        var myChart = new dimple.chart(svg, chartdata);  // Create the chart
+        myChart.setBounds(60, 15, 700, 300);            // Set the chart bounds within the svg container
+
+        myChart.defaultColors = [
+            new dimple.color(&quot;#54aae3&quot;),
+            new dimple.color(&quot;#54aae3&quot;)
+        ];
+
+        var x = myChart.addTimeAxis(&quot;x&quot;, &quot;Year&quot;, &quot;%Y&quot;, &quot;%Y&quot;);  // Define the x axis. The latter statements define the date format which we want to be year only
+        x.timeInterval = 10;  
+
+        var y = myChart.addMeasureAxis(&quot;y&quot;, &quot;Population&quot;); // Define the y axis
+        y.ticks = 6;
+
+        var s = myChart.addSeries(&quot;City&quot;, dimple.plot.line);
+        s.lineMarkers = true;
+        s.interpolation = &quot;cardinal&quot;;
+
+        myChart.draw(500); // Draw the chart. The number is the animation delay in miliseconds
+
+        svg.selectAll(&quot;path.dimple-proj&quot;).style(&quot;stroke-dasharray&quot;, &quot;2&quot;); // Some minor stying changes using the svg selectAll statement. Make the projected data a dashed line and the grid colour lighter.
+        svg.selectAll(&quot;path.domain&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;);
+        svg.selectAll(&quot;g.tick line&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;);
+
+          
+      });
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab8_chart_7.png" style="width:100.0%"
+alt="Figure 8.14: Screenshots of Dimple-2" />
+<div class="figcaption">Figure 8.14: Screenshots of Dimple-2</div>
+</div>
+<p><br></p>
+</div>
+<div id="dimple---barchart-3" class="section level3">
+<h3>Dimple - Barchart 3</h3>
+<p>The final example adds the ability for users to change which city is
+plotted in the line chart example, using an HTML dropdown menu (select
+element) and an event listener.</p>
+<pre class="html"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;World City Populations Chart 1950-2035&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot; /&gt;
+
+&lt;!--Load the chart libraries. Dimple is built on D3, and you need to also add D3--&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://d3js.org/d3.v4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;    
+    #chartContainer {width: 840px; margin: auto; margin-top: 50px; }
+    #chartContainer p {margin-left: 60px; margin-bottom: 5px; margin-top: 0; padding: 0;}
+    #charttitle {font: bold 22px  Verdana, sans-serif;}
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+    
+&lt;body&gt;
+
+&lt;!--This is the div container for the chart--&gt;
+
+&lt;div id=&quot;chartContainer&quot;&gt;
+      
+    &lt;p id=&quot;charttitle&quot;&gt;Chart title is here&lt;/p&gt;
+    &lt;p id=&quot;chartsubhead&quot;&gt;Population 1950-2035. Data UN World Urbanization Prospects.&lt;/p&gt;
+    &lt;p&gt;&lt;select id=&quot;CityMenu&quot;&gt;&lt;option&gt;Change City Here:&lt;/option&gt;&lt;/select&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+
+
+&lt;script&gt;
+
+
+//This statement loads the data from the CSV file, and then runs the function after the CSV is loaded. CityData is an array that contains the CSV data
+
+    // Paste here the github raw url of &quot;CityData_WUP2018_top200.csv&quot; data  
+      d3.csv(&quot;https://raw.githubusercontent.com/fuzhen-yin/2025_carto_test/refs/heads/main/CityData_WUP2018_top200.csv&quot;, function(CityData) {
+        
+        var select = document.getElementById(&quot;CityMenu&quot;);
+        
+        var chartdata;
+
+        for(var i = 0; i &lt; CityData.length; i++) {
+            var el = document.createElement(&quot;option&quot;);
+            el.textContent = CityData[i].CityName + &quot;, &quot; + CityData[i].Country;
+            el.value = CityData[i].Index;
+            select.appendChild(el);
+            }       
+        
+        function SetCityData(index) {
+          
+                console.log(CityData[index]); // Show the data of the row in the console
+
+                document.getElementById(&quot;charttitle&quot;).innerHTML = CityData[index].CityName + &quot;,&amp;nbsp;&quot; + CityData[index].Country; // The name of the city and country is inserted into the chart title
+
+                // Dimple requires each data point on a time series to be a separate row. Below we insert the population data from the CityData array into a new array of JSON objects in the required format
+                chartdata = [
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1950&quot;,&quot;Population&quot;:(CityData[index].pop1950*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1960&quot;,&quot;Population&quot;:(CityData[index].pop1960*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1970&quot;,&quot;Population&quot;:(CityData[index].pop1970*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1980&quot;,&quot;Population&quot;:(CityData[index].pop1980*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;1990&quot;,&quot;Population&quot;:(CityData[index].pop1990*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2000&quot;,&quot;Population&quot;:(CityData[index].pop2000*1000000) },
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2010&quot;,&quot;Population&quot;:(CityData[index].pop2010*1000000)},
+                  { &quot;City&quot;:&quot;Hist&quot;,&quot;Year&quot;:&quot;2015&quot;,&quot;Population&quot;:(CityData[index].pop2015*1000000) },
+                  { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2015&quot;,&quot;Population&quot;:(CityData[index].pop2015*1000000) },
+                  { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2020&quot;,&quot;Population&quot;:(CityData[index].pop2020*1000000) },
+                  { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2030&quot;,&quot;Population&quot;:(CityData[index].pop2030*1000000) },
+                  { &quot;City&quot;:&quot;Proj&quot;,&quot;Year&quot;:&quot;2035&quot;,&quot;Population&quot;:(CityData[index].pop2035*1000000) }
+                ];
+
+        }
+        
+        SetCityData(0);
+        
+        
+        var svg = dimple.newSvg(&quot;#chartContainer&quot;, 840, 440); // The chart is an svg variable assigned to the chartcontainer div. It&#39;s width and height are also assigned here
+        
+            
+        var myChart = new dimple.chart(svg, chartdata);  // Create the chart
+        myChart.setBounds(60, 15, 700, 300);            // Set the chart bounds within the svg container
+
+        myChart.defaultColors = [
+            new dimple.color(&quot;#54aae3&quot;),
+            new dimple.color(&quot;#54aae3&quot;)
+        ];
+
+        var x = myChart.addTimeAxis(&quot;x&quot;, &quot;Year&quot;, &quot;%Y&quot;, &quot;%Y&quot;);  // Define the x axis. The latter statements define the date format which we want to be year only
+        x.timeInterval = 10;  
+
+        var y = myChart.addMeasureAxis(&quot;y&quot;, &quot;Population&quot;); // Define the y axis
+        y.ticks = 6;
+
+        var s = myChart.addSeries(&quot;City&quot;, dimple.plot.line);
+        s.lineMarkers = true;
+        s.interpolation = &quot;cardinal&quot;;
+
+        myChart.draw(500); // Draw the chart. The number is the animation delay in miliseconds
+
+        svg.selectAll(&quot;path.dimple-proj&quot;).style(&quot;stroke-dasharray&quot;, &quot;2&quot;); // Some minor stying changes using the svg selectAll statement. Make the projected data a dashed line and the grid colour lighter.
+        svg.selectAll(&quot;path.domain&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;);
+        svg.selectAll(&quot;g.tick line&quot;).style(&quot;stroke&quot;, &quot;#CCC&quot;);
+
+        document.getElementById(&quot;CityMenu&quot;).onchange = function() {
+           var x = document.getElementById(&quot;CityMenu&quot;).value;
+           console.log(x);
+           SetCityData(x);
+           svg.selectAll(&quot;.dimple-marker,.dimple-marker-back&quot;).remove();
+           myChart.data = chartdata;
+           myChart.draw(500);
+         }          
+          
+          
+          
+      });
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>When you double click on the html file you have created, it should
+open in your <strong>default web browser</strong> software, and show a
+map as the image below.</p>
+<div class="float">
+<img src="figs/lab8_chart_8.png" style="width:100.0%"
+alt="Figure 8.15: Screenshots of Dimple-3" />
+<div class="figcaption">Figure 8.15: Screenshots of Dimple-3</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
