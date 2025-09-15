@@ -197,13 +197,15 @@
             var genus_selected = lt_genus[e.target.value]
             var genus_s_max = lt_g_max_range[e.target.value]
 
-            map.setPaintProperty("denver_tree_point", 'fill-color', [
+            map.setPaintProperty("denver_tree_point", 'fill-extrusion-color', [
                         'interpolate',
                         ['linear'],
                         ['get', genus_selected],
                         0, "white",
                         genus_s_max, '#081D58',
                     ]);
+
+            map.setPaintProperty("denver_tree_point", 'fill-extrusion-height', ['*', 3, ['get', genus_selected]]);
         })
 
         document.getElementById('den_view').addEventListener('click', function(e){

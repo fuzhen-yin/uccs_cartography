@@ -1,0 +1,167 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>Mapbox Example 17 - 2.5D Tree Hex </title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+
+<style>
+
+    /*  Legend Style Sheet  */
+    .legend {
+        background-color: #fff;
+        border-radius: 3px;
+        bottom: 30px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        font:
+            12px/20px 'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
+        padding: 10px;
+        position: absolute;
+        right: 10px;
+        z-index: 1;
+    }
+    .legend h4 {
+        margin: 0 0 10px;
+    }
+
+    .legend div span {
+        border-radius: 50%;
+        display: inline-block;
+        height: 10px;
+        margin-right: 5px;
+        width: 10px;
+    }
+
+    /* Map overlay style sheet  */
+
+    .map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 380px;
+    min-width: 380px;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    }
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .map-overlay h2 {
+        line-height: 24px;
+        display: block;
+        margin: 0 0 10px;
+    }
+    .map-overlay p.credit {
+       margin: 0;
+       padding: 0;
+    }
+
+    /*  Body & Map Style Sheet  */
+    .map-overlay-inner fieldset {
+        border: none;
+        padding: 0;
+        margin: 0 0 10px;
+    }
+
+    /*  Body & Map Style Sheet  */
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+
+<div class='map-overlay'> 
+    <div class='map-overlay-inner'>
+        <h2> 2.5D Denver Tree Map </h2>
+
+        <p class="credit"> This map uses hexagons to visualize the tree data. It is created using the <a href="https://data.colorado.gov/Environment/Map-of-Tree-Inventory-Denver/hzmx-2dfk"> Denver Tree Inventory data </a>. </p>
+
+        <p class="credit"> Zoom in to <a href="#" class="credit" id="den_view">Denver</a> </p>
+
+    </div>
+</div>
+
+
+<script>
+
+    //Put your mapbox access token here
+    mapboxgl.accessToken = 'pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg';  
+
+        // Load a new map in the 'map' HTML div
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4', // Put your mapbox style ID here
+            center: [-104.951046, 39.732470], // starting position [lng, lat]
+            zoom: 11, // starting zoom
+            pitch: 50 // tilt of the viewpoint in degrees
+        });
+
+
+        // When loading the map
+        map.on('load', function() {     
+            
+            // Set global light properties which influence 3D layer shadows
+            map.setLight({color: "#fff", intensity: 0.15, position: [1, 180, 30]});
+            // Add standard navigation control
+            map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');   
+
+            // Load the TREE HEXAGON layer in 3D by setting the type to 'fill-extrusion' 
+            map.addLayer({
+                'id':'denver_tree_point',
+                'type':'fill-extrusion',
+                'source':{
+                    type:'vector',
+                    url:'mapbox://junzhimager.cnyhw4p3' // After "mapbox://" paste your Mapbox tileset ID
+                },
+                'source-layer':'denver_hexagon_tree_count_top-5j28n7', // name of tilesets
+                'layout':{
+                    'visibility': 'visible'
+                },
+                'paint': {
+                    // color circle by tree genus
+                    'fill-extrusion-color':[
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'n_all'],
+                        0, "white",
+                        720, '#081D58',
+
+                    ],
+                    'fill-extrusion-height':['*', 3, ['get', 'n_all']],  //set the height to 3 times of the value of n_all
+                    'fill-extrusion-opacity':0.8
+                }
+            });
+
+
+        })
+
+        // Add an event listener when users clicking on "zoom in to Denver" 
+        document.getElementById('den_view').addEventListener('click', function(e){
+
+            map.flyTo({
+                center:[-104.961046, 39.732470],
+                zoom:12,
+                speed:0.3,
+                pitch:60
+            })
+        })
+
+
+</script>
+
+</body>
+</html>

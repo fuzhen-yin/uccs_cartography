@@ -1,0 +1,44 @@
+
+## TUTORIAL - HOW TO COMBINE PROJECT WEBSITES TOGETHER?
+
+
+## BEFORE START 
+
+Create a sub-folder for project combination
+Obtain the project urls
+	Project 1:
+		https://fuzhen-yin.github.io/2025_carto_test/eg_final/prj_1.html
+
+	Project 2:
+		https://fuzhen-yin.github.io/2025_carto_test/eg_final/prj_2.html
+
+	Project 3:
+		https://fuzhen-yin.github.io/2025_carto_test/eg_final/prj_3.html
+
+
+
+## Website template (Final Project Instruction - pdf):
+
+Popular website templates, like full page scrolling flow designs, help link individual visualizations together. Various JavaScript libraries are available for this functionality, for example:
+
+	https://alvarotrigo.com/fullPage/#page1 
+	https://github.com/russellgoldenberg/scrollama#scrollamajs 
+
+
+## Download example folders
+	Folder Structure 
+	Browse Example
+
+
+## Adjust Example Template
+	
+	Move necessary files (htl, css, js) to the subfolder 
+	Make Adjustment
+
+
+
+
+## Using iFrame to embed project 
+
+CODE: 
+	<iframe id="project_1" src="https://fuzhen-yin.github.io/2025_carto_test/eg_final/prj_1.html" height="800 px" width="1200px" frameBorder="0" scrolling="no"></iframe>

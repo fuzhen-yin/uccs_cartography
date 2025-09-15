@@ -1,0 +1,6 @@
+Website Templates:
+Popular website templates, like full page scrolling flow designs, help link individual visualizations together.
+Various JavaScript libraries are available for this functionality, for example
+
+https://alvarotrigo.com/fullPage/#page1 
+https://github.com/russellgoldenberg/scrollama#scrollamajs 
