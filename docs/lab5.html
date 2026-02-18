@@ -13,7 +13,7 @@
 
 <title>Lab 5: Intro to Interactive Mapping (Part I)</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -736,9 +736,9 @@ lot of online data converters.</p>
 the course. The easiest way to add a <strong>GeoJSON</strong> file to a
 <strong>Leaflet</strong> map is:</p>
 <blockquote>
-<p>to edit the <strong>GeoJSON</strong> file to create a
-<strong>.js</strong> file, and wrap the GeoJSON data inside
-<code>var = myvariablename [….];</code> (see the
+<p>To convert a <strong>GeoJSON</strong> file to a <strong>.js</strong>
+file. Please wrap the GeoJSON data inside the square brackets
+<code>var myvariablename = [ COPY_PASTE_GEOJSON_HERE];</code> (see the
 <code>elpaso_2022_waterbody_area.js</code> example file included in the
 lab materials).</p>
 </blockquote>
@@ -1007,38 +1007,6 @@ will need to insert your <strong>access token</strong> and your
 <strong>Style URL</strong> in the example 6 code as shown below.
 <strong>Please submit the .html file of your final stylized flow as part
 of your Lab 5 assignment</strong>.</p>
-<pre class="html"><code>
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot; /&gt;
-&lt;title&gt;Mapbox Example 6- UK Flowmap 2011&lt;/title&gt;
-
-&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;
-&lt;link href=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js&quot;&gt;&lt;/script&gt;
-
-&lt;style&gt;
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
-&lt;script&gt;
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoiZnppbmciLCJhIjoiY2s5eHE0NW4wMDV6aDNnbjFrYWpyNmE1eSJ9.PQHJ-2XYEas7K6CpTJHf0A&#39;;                   //Mapbox Accesstoken
-
-    var map = new mapboxgl.Map({
-        container: &#39;map&#39;, // container id
-        style: &#39;mapbox://styles/fzing/cm7vgvvn5001l01rhbhmf55np&#39;, // stylesheet URL, the style that you&#39;ve created
-        center: [-2.855366, 53.273659], // starting position [lng, lat]
-        zoom: 6 // starting zoom
-    });
-
-&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
 <p>Save this file as <strong>example6.html</strong>.</p>
 <p>When you double click on the html file you have created, it should
 open in your <strong>default web browser</strong> software, and show a
