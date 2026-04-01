@@ -13,7 +13,7 @@
 
 <title>Lab 7: Advanced Interactive Cartography using Large Dataset &amp; 2.5D Hexagon Map</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -450,8 +450,10 @@ changing the color palette &amp; legends for different genera. Move the
 positions of title box and legend to the left side. (30 pts).</li>
 <li><strong>Revise Example 16</strong> by using your own base map, and
 changing the color palette, for the hexagon heat map. Try a different
-data scaling rule (other than linear) to color the hexagon. (35
-pts)</li>
+data scaling rule (other than linear) to color the hexagon. See
+documentation for different interpolation types <a
+href="https://docs.mapbox.com/style-spec/reference/expressions/#interpolate">here</a>
+(35 pts)</li>
 <li><strong>BONUS! Revise Example 17</strong> by adding a selection
 feature (similar to example 16). The selection feature allows user to
 toggle the view and see 3D density hexagon maps of different tree
@@ -490,12 +492,12 @@ Example 16 could be useful</em>. (5 pts)</li>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 12 // starting zoom
         });
@@ -566,12 +568,12 @@ alt="Figure 7.2: Screenshots of Mapbox Example 12" /> <br></p>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 12 // starting zoom
         });
@@ -746,12 +748,12 @@ alt="Figure 7.3: Screenshots of Mapbox Example 13" /> <br></p>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 12 // starting zoom
         });
@@ -919,12 +921,12 @@ alt="Figure 7.4: Screenshots of Mapbox Example 14" /> <br></p>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 11 // starting zoom
         });
@@ -1097,12 +1099,12 @@ different tree genera.</p>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 11 // starting zoom
         });
@@ -1298,12 +1300,12 @@ alt="Figure 7.6: Screenshots of Mapbox Example 15" /> <br></p>
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
             container: &#39;map&#39;, // container id
-            style: &#39;mapbox://styles/junzhimager/cm97e15qe00al01sz884x81p4&#39;, // Put your mapbox style ID here
+            style: &#39;mapbox://styles/YOUR_MAPBOX_STYLE_URL&#39;, // Put your mapbox style ID here
             center: [-104.951046, 39.732470], // starting position [lng, lat]
             zoom: 11, // starting zoom
             pitch: 50 // tilt of the viewpoint in degrees
@@ -1499,7 +1501,7 @@ see 3D density hexagon maps of different tree genera. Hint: some scripts
 &lt;script&gt;
 
     //Put your mapbox access token here
-    mapboxgl.accessToken = &#39;pk.eyJ1IjoianVuemhpbWFnZXIiLCJhIjoiY2s5eHBpdzkzMDVkZjNtcnQybzd6YmlxcyJ9.9porJ3w9YRjSl6X0Mx-WUg&#39;;  
+    mapboxgl.accessToken = &#39;YOUR_MAPBOX_ACCESSTOKEN&#39;;  
 
         // Load a new map in the &#39;map&#39; HTML div
         var map = new mapboxgl.Map({
